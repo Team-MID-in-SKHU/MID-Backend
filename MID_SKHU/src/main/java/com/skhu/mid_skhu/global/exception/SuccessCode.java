@@ -28,4 +28,3 @@ public enum SuccessCode {
         return httpStatus.value();
     }
 }
-

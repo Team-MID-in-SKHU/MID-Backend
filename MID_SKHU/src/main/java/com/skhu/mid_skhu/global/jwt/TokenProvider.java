@@ -1,6 +1,6 @@
 package com.skhu.mid_skhu.global.jwt;
 
-import com.skhu.mid_skhu.entity.user.User;
+import com.skhu.mid_skhu.entity.user.Student;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
 import io.jsonwebtoken.Claims;
@@ -41,30 +41,28 @@ public class TokenProvider {
         this.accessTokenValidityTime = accessTokenValidityTime;
         this.refreshTokenValidityTime = refreshTokenValidityTime;
     }
-    public String createRefreshToken(User user) {
+    public String createRefreshToken(Student student) {
         long nowTime = (new Date().getTime());
 
         Date refreshTokenExpiredTime = new Date(nowTime + refreshTokenValidityTime);
 
         return Jwts.builder()
-                .setSubject(user.getUserSeq().toString())
+                .setSubject(student.getUserId().toString())
                 .setIssuedAt(new Date())
-                .claim("Role",user.getRoleType().getCode())
-                .claim("email", user.getEmail())
+                .claim("Role", student.getRoleType().getCode())
                 .setExpiration(refreshTokenExpiredTime)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String createAccessToken(User user) {
+    public String createAccessToken(Student student) {
         long nowTime = (new Date().getTime());
 
         Date accessTokenExpiredTime = new Date(nowTime + accessTokenValidityTime);
 
         return Jwts.builder()
-                .setSubject(user.getUserSeq().toString())
-                .claim("Role",user.getRoleType().getCode())
-                .claim("email", user.getEmail())
+                .setSubject(student.getUserId().toString())
+                .claim("Role", student.getRoleType().getCode())
                 .setExpiration(accessTokenExpiredTime)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
