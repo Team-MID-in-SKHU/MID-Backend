@@ -36,11 +36,11 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(name = "PASSWORD", nullable = false)
-    private String password;
-
     @Column(name = "STUDENT_NO", nullable = false)
     private String studentNo;
+
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
 
     @Column(name = "STUDENT_NAME", length = 20, nullable = false)
     private String name;

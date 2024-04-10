@@ -4,32 +4,47 @@ import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.SuccessCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class ApiResponse<T> {
 
-    private final int code;
+    private final int status;
+    private final boolean success;
     private final String message;
     private T data;
 
-    public static ApiResponse success(SuccessCode successCode) {
-        return new ApiResponse<>(successCode.getHttpStatusCode(), successCode.getMessage());
+    // 추후 수정
+    public static <T> ResponseEntity<ApiResponse<T>> success(SuccessCode successCode, T data) {
+        return ResponseEntity.ok(ApiResponse.<T>builder()
+                .success(true)
+                .message(successCode.getMessage())
+                .data(data)
+                .build());
     }
 
-    public static <T> ApiResponse<T> success(SuccessCode successCode, T data) {
-        return new ApiResponse<T>(successCode.getHttpStatusCode(), successCode.getMessage(), data);
-    }
+//    public static <T> ApiResponse<T> success(SuccessCode successCode, T data) {
+//        return new ApiResponse<T>(successCode.getHttpStatusCode(), successCode.getMessage(), data);
+//    }
 
-    public static ApiResponse error(ErrorCode errorCode) {
-        return new ApiResponse<>(errorCode.getHttpStatusCode(), errorCode.getMessage());
-    }
+//    public static ApiResponse error(ErrorCode errorCode) {
+//        return new ApiResponse<>(errorCode.getHttpStatusCode(), errorCode.getMessage());
+//    }
 
-    public static ApiResponse error(ErrorCode errorCode, String message) {
-        return new ApiResponse(errorCode.getHttpStatusCode(), errorCode.getMessage(), message);
+    public static <T> ResponseEntity<ApiResponse<T>> error(ErrorCode errorCode, T data) {
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ApiResponse.<T>builder()
+                        .status(errorCode.getHttpStatus().value())
+                        .success(false)
+                        .message(errorCode.getMessage())
+                        .data(data)
+                        .build());
     }
 }
-
