@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,7 @@ public class Student {
     private Long userId;
 
     @Column(name = "STUDENT_NO", nullable = false)
+    @Size(min = 9, max = 9)
     private String studentNo;
 
     @Column(name = "PASSWORD", nullable = false)
