@@ -27,7 +27,5 @@ public class JwtFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
-
-        // 이슈 생성 및 Commit, PR Test
     }
 }
