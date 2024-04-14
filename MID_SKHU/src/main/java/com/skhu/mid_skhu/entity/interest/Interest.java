@@ -1,6 +1,6 @@
 package com.skhu.mid_skhu.entity.interest;
 
-import com.skhu.mid_skhu.entity.user_interest.User_Interest;
+import com.skhu.mid_skhu.entity.user_interest.Student_Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -41,7 +41,7 @@ public class Interest {
     private InterestCategory category;
 
     @OneToMany(mappedBy = "interest", fetch = FetchType.LAZY)
-    private List<User_Interest> students = new ArrayList<>();
+    private List<Student_Interest> students = new ArrayList<>();
 
     // 관심사 종류가 결정되면 추후에 추가 예정 (maybe enum?)
 }

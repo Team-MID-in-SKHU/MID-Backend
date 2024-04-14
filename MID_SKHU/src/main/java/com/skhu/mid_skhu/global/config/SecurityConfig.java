@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -23,7 +25,7 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-public class SecurityConfig{
+public class SecurityConfig {
 
     private final TokenProvider tokenprovider;
 
@@ -37,7 +39,7 @@ public class SecurityConfig{
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/v22/**", "swagger-ui/**", "v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/v1/**", "swagger-ui/**", "v3/api-docs/**").permitAll()
                         .requestMatchers("/test").authenticated()
                         .requestMatchers("/api/v22/reportForAdmin/**").hasRole("ADMIN") // 관리자만 해당 URL에 접근할 수 있음
                         .requestMatchers("api/v22/noticeForAdmin/**").hasRole("ADMIN")
@@ -62,5 +64,10 @@ public class SecurityConfig{
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

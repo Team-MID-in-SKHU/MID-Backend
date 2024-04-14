@@ -1,4 +1,4 @@
-package com.skhu.mid_skhu.entity.user;
+package com.skhu.mid_skhu.entity.student;
 
 
 import com.skhu.mid_skhu.global.exception.ErrorCode;

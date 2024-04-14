@@ -1,7 +1,7 @@
 package com.skhu.mid_skhu.entity.user_interest;
 
 import com.skhu.mid_skhu.entity.interest.Interest;
-import com.skhu.mid_skhu.entity.user.Student;
+import com.skhu.mid_skhu.entity.student.Student;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -25,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class User_Interest {
+public class Student_Interest {
 
     @JsonIgnore
     @Id

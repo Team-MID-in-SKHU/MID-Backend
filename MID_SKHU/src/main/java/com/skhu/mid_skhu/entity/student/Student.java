@@ -1,6 +1,6 @@
-package com.skhu.mid_skhu.entity.user;
+package com.skhu.mid_skhu.entity.student;
 
-import com.skhu.mid_skhu.entity.user_interest.User_Interest;
+import com.skhu.mid_skhu.entity.user_interest.Student_Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -44,11 +44,11 @@ public class Student {
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @Column(name = "STUDENT_NAME", length = 20, nullable = false)
+    @Column(name = "STUDENT_NAME", length = 10, nullable = false)
     private String name;
 
     @JsonIgnore
-    @Column(name = "PHONE_NUMBER", length = 128, nullable = false)
+    @Column(name = "PHONE_NUMBER", length = 14, nullable = false)
     private String phoneNumber;
 
     @Column(name = "ROLE_TYPE", length = 20, nullable = false)
@@ -56,5 +56,5 @@ public class Student {
     private RoleType roleType;
 
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-    private List<User_Interest> interests = new ArrayList<>();
+    private List<Student_Interest> interests = new ArrayList<>();
 }

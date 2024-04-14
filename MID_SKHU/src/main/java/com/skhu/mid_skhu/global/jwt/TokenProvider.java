@@ -1,6 +1,6 @@
 package com.skhu.mid_skhu.global.jwt;
 
-import com.skhu.mid_skhu.entity.user.Student;
+import com.skhu.mid_skhu.entity.student.Student;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
 import io.jsonwebtoken.Claims;

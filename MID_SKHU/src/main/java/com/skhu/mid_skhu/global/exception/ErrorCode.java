@@ -48,7 +48,7 @@ public enum ErrorCode {
     NOT_FOUND_USER_EXCEPTION(HttpStatus.NOT_FOUND, "해당 검색결과에 해당하는 사용자를 찾을 수 없습니다."),
 
     // 409 Conflict
-    ALREADY_EXIST_EMAIL_EXCEPTION(HttpStatus.CONFLICT, "이미 회원가입이 완료된 사용자입니다."),
+    ALREADY_EXIST_STUDENT_EXCEPTION(HttpStatus.CONFLICT, "이미 회원가입이 완료된 사용자입니다."),
     ALREADY_EXIST_SUBJECT_EXCEPTION(HttpStatus.CONFLICT, "이미 존재하는 제목입니다."),
 
     // 500 Internal Server Exception
