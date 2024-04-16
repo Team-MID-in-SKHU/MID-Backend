@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class AuthService {
+public class SignUpService {
 
     private final StudentRepository studentRepository;
     private final StudentRefreshTokenRepository studentRefreshTokenRepository;
