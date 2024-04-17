@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class ApiResponse<T> {
+public class ApiResponseTemplate<T> {
 
     private final int status;
     private final boolean success;
@@ -21,26 +21,18 @@ public class ApiResponse<T> {
     private T data;
 
     // 추후 수정
-    public static <T> ResponseEntity<ApiResponse<T>> success(SuccessCode successCode, T data) {
-        return ResponseEntity.ok(ApiResponse.<T>builder()
+    public static <T> ResponseEntity<ApiResponseTemplate<T>> success(SuccessCode successCode, T data) {
+        return ResponseEntity.ok(ApiResponseTemplate.<T>builder()
                 .success(true)
                 .message(successCode.getMessage())
                 .data(data)
                 .build());
     }
 
-//    public static <T> ApiResponse<T> success(SuccessCode successCode, T data) {
-//        return new ApiResponse<T>(successCode.getHttpStatusCode(), successCode.getMessage(), data);
-//    }
-
-//    public static ApiResponse error(ErrorCode errorCode) {
-//        return new ApiResponse<>(errorCode.getHttpStatusCode(), errorCode.getMessage());
-//    }
-
-    public static <T> ResponseEntity<ApiResponse<T>> error(ErrorCode errorCode, T data) {
+    public static <T> ResponseEntity<ApiResponseTemplate<T>> error(ErrorCode errorCode, T data) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
-                .body(ApiResponse.<T>builder()
+                .body(ApiResponseTemplate.<T>builder()
                         .status(errorCode.getHttpStatus().value())
                         .success(false)
                         .message(errorCode.getMessage())
