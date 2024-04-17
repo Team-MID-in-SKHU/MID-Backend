@@ -5,7 +5,7 @@ import com.skhu.mid_skhu.dto.interest.responseDto.InterestRegisterResponseDto;
 import com.skhu.mid_skhu.entity.interest.Interest;
 import com.skhu.mid_skhu.entity.interest.InterestCategory;
 import com.skhu.mid_skhu.entity.student.Student;
-import com.skhu.mid_skhu.global.common.dto.ApiResponse;
+import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
 import com.skhu.mid_skhu.repository.InterestRepository;
@@ -29,7 +29,7 @@ public class InterestRegisterService {
     // feat#13 으로 커밋하기
     // 이슈파고 -> docs 브랜치 파고 -> api문서 수정하고 커밋하기
     @Transactional
-    public ApiResponse<InterestRegisterResponseDto> interestRegister(InterestRegisterRequestDto requestDto, Principal principal) {
+    public ApiResponseTemplate<InterestRegisterResponseDto> interestRegister(InterestRegisterRequestDto requestDto, Principal principal) {
         // 보안컨텍스트에 null이 담겨진 경우(토큰이 잘못된 경우)에 대한 전역 예외처리 해놓기
 
         Long studentId = Long.parseLong(principal.getName());
@@ -56,7 +56,7 @@ public class InterestRegisterService {
                         .collect(Collectors.toList()))
                 .build();
 
-        return ApiResponse.<InterestRegisterResponseDto>builder()
+        return ApiResponseTemplate.<InterestRegisterResponseDto>builder()
                 .status(201)
                 .success(true)
                 .message("관심사 등록 성공")

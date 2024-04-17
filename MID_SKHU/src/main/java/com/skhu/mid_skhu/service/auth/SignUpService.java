@@ -6,7 +6,7 @@ import com.skhu.mid_skhu.dto.auth.responseDto.SignUpResponseDto;
 import com.skhu.mid_skhu.entity.student.RoleType;
 import com.skhu.mid_skhu.entity.student.Student;
 import com.skhu.mid_skhu.entity.student.StudentRefreshToken;
-import com.skhu.mid_skhu.global.common.dto.ApiResponse;
+import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
 import com.skhu.mid_skhu.global.jwt.TokenProvider;
@@ -28,7 +28,7 @@ public class SignUpService {
     private final TokenProvider tokenProvider;
 
     @Transactional
-    public ApiResponse<SignUpResponseDto> signUp(SignUpRequestDto signUpRequestDto) {
+    public ApiResponseTemplate<SignUpResponseDto> signUp(SignUpRequestDto signUpRequestDto) {
 
         String encodePassword = passwordEncoder.encode(signUpRequestDto.getPassword());
         signUpRequestDto.setPassword(encodePassword);
@@ -66,7 +66,7 @@ public class SignUpService {
                 .refreshToken(refreshToken)
                 .build();
 
-        return ApiResponse.<SignUpResponseDto>builder()
+        return ApiResponseTemplate.<SignUpResponseDto>builder()
                 .status(201)
                 .success(true)
                 .message("회원가입 성공")
