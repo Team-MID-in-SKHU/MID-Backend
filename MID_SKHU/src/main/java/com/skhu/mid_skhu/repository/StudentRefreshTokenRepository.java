@@ -9,7 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface StudentRefreshTokenRepository extends JpaRepository<StudentRefreshToken, Long> {
-    Optional<StudentRefreshToken> findByStudent_UserId(Long userSeq);
-
+    Optional<StudentRefreshToken> findByStudent_UserId(Long userId);
     void deleteByStudent(Student student);
+
+
 }

@@ -1,7 +1,9 @@
 package com.skhu.mid_skhu.controller.auth;
 
+import com.skhu.mid_skhu.dto.auth.requestDto.LoginRequestDto;
 import com.skhu.mid_skhu.dto.auth.requestDto.SignUpRequestDto;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
+import com.skhu.mid_skhu.service.auth.LoginService;
 import com.skhu.mid_skhu.service.auth.SignUpService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final SignUpService signUpService;
+    private final LoginService loginService;
 
     @PostMapping("/signUp")
     @Operation(
@@ -35,5 +38,21 @@ public class AuthController {
     public ResponseEntity<ApiResponseTemplate> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
         ApiResponseTemplate apiResponseTemplate = signUpService.signUp(signUpRequestDto);
         return ResponseEntity.status(apiResponseTemplate.getStatus()).body(apiResponseTemplate);
+    }
+
+    @PostMapping("/login")
+    @Operation(
+            summary = "로그인",
+            description = "사용자의 학번, 비밀번호를 받아와서 암호화되어서 저장된 Password와 매칭되는지를 검사하고 로그인을 통해서 갱신된 refreshToken, accessToken을 반환합니다",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "로그인 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 암호 입력"),
+                    @ApiResponse(responseCode = "404", description = "학번을 찾을수 없거나, 잘못된 값을 입력"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate> login(@RequestBody LoginRequestDto loginRequestDto) {
+        ApiResponseTemplate data = loginService.login(loginRequestDto);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
