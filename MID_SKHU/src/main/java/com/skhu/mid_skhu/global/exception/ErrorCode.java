@@ -12,6 +12,7 @@ public enum ErrorCode {
 
     // 400 Bad Request
     VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+    PASSWORD_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST,"존재하지 않는 비밀번호 or 비밀번호가 잘못되었습니다"),
     VALIDATION_REQUEST_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "필수적인 요청 값이 입력되지 않았습니다."),
     VALIDATION_REQUEST_HEADER_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 헤더값이 입력되지 않았습니다."),
     VALIDATION_REQUEST_PARAMETER_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 파라미터값이 입력되지 않았습니다."),
@@ -40,7 +41,7 @@ public enum ErrorCode {
     // 404 NOT FOUND
     NOT_FOUND_ID_EXCEPTION(HttpStatus.NOT_FOUND, "찾을 수 없는 ID"),
     NOT_FOUND_CATEGORY_IN_INTEREST_EXCEPTION(HttpStatus.NOT_FOUND, "해당 관심사를 찾을 수 없습니다."),
-    NOT_FOUND_EMAIL_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 이메일"),
+    NOT_FOUND_STUDENT_NUM_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 학번이거나 학번을 잘못입력했습니다."),
     NOT_FOUND_WORK_RECORD_EXCEPTION(HttpStatus.NOT_FOUND, "해당 사용자의 근무 기록이 존재하지 않습니다."),
     NOT_FOUND_REPORTS_EXCEPTION(HttpStatus.NOT_FOUND, "해당 검색 필터에 맞는 신고 내역들이 존재하지 않습니다"),
     NOT_FOUND_ATTENDANCE_EXCEPTION(HttpStatus.NOT_FOUND, "해당 사용자에 대한 출근 기록이 없습니다. "),
@@ -52,7 +53,7 @@ public enum ErrorCode {
 
     // 500 Internal Server Exception
     INTERNAL_SERVER_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "알 수 없는 서버 에러가 발생했습니다."),
-    TOKEN_CREATION_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "토큰을 생성하는 과정에서 알 수 없는 오류가 발생했습니다."),
+    TOKEN_CREATION_FAILED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "토큰을 생성하는 과정에서 알 수 없는 오류가 발생했습니다."),
 
     // 503 Service Unavailable
     FAILED_GET_TOKEN_EXCEPTION(HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS, "구글 엑세스 토큰을 가져오는데 실패했습니다."),
