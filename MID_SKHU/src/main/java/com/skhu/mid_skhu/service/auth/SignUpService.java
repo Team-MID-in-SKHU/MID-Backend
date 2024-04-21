@@ -2,7 +2,9 @@ package com.skhu.mid_skhu.service.auth;
 
 
 import com.skhu.mid_skhu.dto.auth.requestDto.SignUpRequestDto;
+import com.skhu.mid_skhu.dto.auth.requestDto.StudentNoDuplicateInspectionRequestDto;
 import com.skhu.mid_skhu.dto.auth.responseDto.AuthResponseDto;
+import com.skhu.mid_skhu.dto.auth.responseDto.StudentNoDuplicateInspectionResponseDto;
 import com.skhu.mid_skhu.entity.student.RoleType;
 import com.skhu.mid_skhu.entity.student.Student;
 import com.skhu.mid_skhu.entity.student.StudentRefreshToken;
@@ -70,6 +72,24 @@ public class SignUpService {
                 .status(201)
                 .success(true)
                 .message("회원가입 성공")
+                .data(responseDto)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ApiResponseTemplate<StudentNoDuplicateInspectionResponseDto> studentNoDuplicateInspection
+            (StudentNoDuplicateInspectionRequestDto studentNoDuplicateInspectionRequestDto) {
+
+        Boolean isDuplicate = studentRepository.existsByStudentNo(studentNoDuplicateInspectionRequestDto.getStudentNo());
+
+        StudentNoDuplicateInspectionResponseDto responseDto = StudentNoDuplicateInspectionResponseDto.builder()
+                .studentNo(isDuplicate)
+                .build();
+
+        return ApiResponseTemplate.<StudentNoDuplicateInspectionResponseDto>builder()
+                .status(200)
+                .success(true)
+                .message("중복검사 성공")
                 .data(responseDto)
                 .build();
     }

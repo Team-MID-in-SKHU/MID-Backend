@@ -2,6 +2,7 @@ package com.skhu.mid_skhu.controller.auth;
 
 import com.skhu.mid_skhu.dto.auth.requestDto.LoginRequestDto;
 import com.skhu.mid_skhu.dto.auth.requestDto.SignUpRequestDto;
+import com.skhu.mid_skhu.dto.auth.requestDto.StudentNoDuplicateInspectionRequestDto;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import com.skhu.mid_skhu.service.auth.LoginService;
 import com.skhu.mid_skhu.service.auth.SignUpService;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +55,21 @@ public class AuthController {
     )
     public ResponseEntity<ApiResponseTemplate> login(@RequestBody LoginRequestDto loginRequestDto) {
         ApiResponseTemplate data = loginService.login(loginRequestDto);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @GetMapping("/duplicate-check")
+    @Operation(
+            summary = "학번 중복검사",
+            description = "사용자의 학번을 중복인지 검사합니다",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "중복검사 성공"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의 or json에 값이 없는 경우")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate> isDuplicateStudentNo(
+            @RequestBody StudentNoDuplicateInspectionRequestDto studentNoDuplicateInspectionRequestDto) {
+        ApiResponseTemplate data = signUpService.studentNoDuplicateInspection(studentNoDuplicateInspectionRequestDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

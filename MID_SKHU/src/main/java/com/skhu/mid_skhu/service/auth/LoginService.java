@@ -28,7 +28,6 @@ public class LoginService {
     private final TokenRenewService tokenRenewService;
     private final PasswordEncoder passwordEncoder;
 
-    // 이거 컨트롤러 만들고 테스트후 feat#8 브랜치로 커밋
     // Student 엔티티에 studentNo 컬럼 옵션에 Unique 추가하기
     // 토큰을 검증하는 세세한 예외처리 로직을 만들고 사용하자
     // 학번 중복검사 api만들고 feat#8로 커밋
