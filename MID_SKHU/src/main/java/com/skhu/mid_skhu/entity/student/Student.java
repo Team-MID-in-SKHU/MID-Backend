@@ -38,7 +38,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(name = "STUDENT_NO", nullable = false)
+    @Column(name = "STUDENT_NO", nullable = false, unique = true)
     @Size(min = 9, max = 9)
     private String studentNo;
 
