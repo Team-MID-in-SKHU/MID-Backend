@@ -1,6 +1,8 @@
 package com.skhu.mid_skhu.entity.interest;
 
+import com.skhu.mid_skhu.entity.event.Event;
 import com.skhu.mid_skhu.entity.student.Student;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -12,12 +14,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,5 +46,6 @@ public class Interest {
     @JoinColumn(name = "STUDENT_ID")
     private Student student;
 
-    // 관심사 종류가 결정되면 추후에 추가 예정 (maybe enum?)
+    @OneToMany(mappedBy = "interests", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Event> events = new ArrayList<>();
 }

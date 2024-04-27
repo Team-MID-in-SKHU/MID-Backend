@@ -1,12 +1,16 @@
 package com.skhu.mid_skhu.entity.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.skhu.mid_skhu.entity.interest.Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,13 +41,16 @@ public class Event {
     @Column(name = "EVENT_DESCRIPTION", nullable = false)
     private String description;
 
+    @Column(name = "EVENT_LOCATION", nullable = false)
+    private String eventLocation;
+
     @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime startAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime endAt;
 
-    // 일정 장소에 대한 열거형 타입으로 관리?
-
-    // 관심사의 종류와 설계가 정해진다면 -> interestId 해당 일정이 속한 관심사의 식별자를 참조할 수 있도록해야함
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INTEREST_ID")
+    private Interest interest;
 }
