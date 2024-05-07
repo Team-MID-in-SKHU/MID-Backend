@@ -23,6 +23,7 @@ public class ApiResponseTemplate<T> {
     // 추후 수정
     public static <T> ResponseEntity<ApiResponseTemplate<T>> success(SuccessCode successCode, T data) {
         return ResponseEntity.ok(ApiResponseTemplate.<T>builder()
+                .status(successCode.getHttpStatus().value())
                 .success(true)
                 .message(successCode.getMessage())
                 .data(data)
