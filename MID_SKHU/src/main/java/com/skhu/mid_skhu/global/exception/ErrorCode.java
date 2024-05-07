@@ -24,6 +24,9 @@ public enum ErrorCode {
     INVALID_SIGNATURE_EXCEPTION(HttpStatus.BAD_REQUEST, "JWT 토큰의 서명이 올바르지 않습니다."),
     INVALID_DISPLAY_NAME_EXCEPTION(HttpStatus.BAD_REQUEST, "유효하지 않은 displayName이 있습니다 "),
     NUMBER_LESS_THAN_ZERO_EXCEPTION(HttpStatus.BAD_REQUEST, "페이지의 크기 번호나 페이지의 사이즈는 0 미만일 수 없습니다. "),
+    SMS_CERTIFICATION_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "인증번호가 일치하지 않습니다."),
+    SMS_CERTIFICATION_SEND_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "인증번호 발송에 실패했습니다."),
+    SMS_CERTIFICATION_VERIFY_FAIL_EXCEPTION(HttpStatus.BAD_REQUEST, "문자 인증에 실패했습니다."),
 
     // 401 Unauthorized
     UNAUTHORIZED_EMAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "이메일 인증이 되지 않은 유저"),
