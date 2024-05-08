@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 public class UserInfoResponseDto {
 
-    private Long studentNo;
+    private String studentNo;
     private String name;
     private RoleType roleType;
 }

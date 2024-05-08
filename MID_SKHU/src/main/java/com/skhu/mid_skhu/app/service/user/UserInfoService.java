@@ -29,7 +29,7 @@ public class UserInfoService {
                         "학생 : " + ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage()));
 
         UserInfoResponseDto responseDto = UserInfoResponseDto.builder()
-                .studentNo(student.getUserId())
+                .studentNo(student.getStudentNo())
                 .name(student.getName())
                 .roleType(student.getRoleType())
                 .build();
