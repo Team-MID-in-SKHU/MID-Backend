@@ -2,9 +2,13 @@ package com.skhu.mid_skhu.app.entity.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.skhu.mid_skhu.app.entity.interest.Interest;
+import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,12 +20,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -50,7 +58,11 @@ public class Event {
     @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime endAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "INTEREST_ID")
-    private Interest interest;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Column(name = "INTEREST_CATEGORY", nullable = false)
+    private List<InterestCategory> category;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "INTEREST_ID")
+//    private Interest interest;
 }

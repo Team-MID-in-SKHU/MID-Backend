@@ -36,8 +36,8 @@ public class InterestController {
             })
     public ResponseEntity<ApiResponseTemplate<InterestRegisterResponseDto>> interestRegister(@RequestBody InterestRegisterRequestDto requestDto,
                                                                                              Principal principal) {
-        ApiResponseTemplate<InterestRegisterResponseDto> apiResponseTemplate = registerService.interestRegister(requestDto, principal);
+        ApiResponseTemplate<InterestRegisterResponseDto> data = registerService.interestRegister(requestDto, principal);
 
-        return new ResponseEntity<>(apiResponseTemplate, HttpStatus.CREATED);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

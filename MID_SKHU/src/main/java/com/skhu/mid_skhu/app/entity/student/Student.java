@@ -60,6 +60,5 @@ public class Student {
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Interest> interests = new ArrayList<>();
 
-
     // @JsonIgnore or @JsonManagedReference 찾아보고 JSON 직렬화 문제 관리해놓기
 }

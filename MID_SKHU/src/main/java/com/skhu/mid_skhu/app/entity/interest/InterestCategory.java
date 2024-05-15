@@ -10,18 +10,19 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public enum InterestCategory {
 
-    ACADEMIC_SCHEDULE("학사일정"),
-    STUDENT_COUNCIL_SCHEDULE("학생회일정"),
-    CLUB_SCHEDULE("동아리 일정"),
-    SMALL_GROUP("소모임"),
-    PRE_CLUB("준동아리"),
-    EXTERNAL_CLUB("대외동아리");
+    ACADEMIC_SCHEDULE("ACADEMIC_SCHEDULE", "학사일정"),
+    STUDENT_COUNCIL_SCHEDULE("STUDENT_COUNCIL_SCHEDULE", "학생회일정"),
+    CLUB_SCHEDULE("CLUB_SCHEDULE", "동아리 일정"),
+    SMALL_GROUP("SMALL_GROUP", "소모임"),
+    PRE_CLUB("PRE_CLUB", "준동아리"),
+    EXTERNAL_CLUB("EXTERNAL_CLUB", "대외동아리");
 
+    private final String code;
     private final String displayName;
 
     public static InterestCategory convertToCategory(String categoryStr) {
         for (InterestCategory category : InterestCategory.values()) {
-            if (category.name().equals(categoryStr)) {
+            if (category.code.equals(categoryStr)) {
                 return category;
             }
         }
