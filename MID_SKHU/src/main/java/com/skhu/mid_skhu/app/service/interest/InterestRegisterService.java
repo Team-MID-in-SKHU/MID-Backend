@@ -30,7 +30,6 @@ public class InterestRegisterService {
     // 이슈파고 -> docs 브랜치 파고 -> api문서 수정하고 커밋하기
     @Transactional
     public ApiResponseTemplate<InterestRegisterResponseDto> interestRegister(InterestRegisterRequestDto requestDto, Principal principal) {
-        // 보안컨텍스트에 null이 담겨진 경우(토큰이 잘못된 경우)에 대한 전역 예외처리 해놓기
 
         Long studentId = Long.parseLong(principal.getName());
 
