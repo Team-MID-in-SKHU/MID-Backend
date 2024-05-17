@@ -1,8 +1,6 @@
 package com.skhu.mid_skhu.app.entity.interest;
 
-import com.skhu.mid_skhu.app.entity.event.Event;
 import com.skhu.mid_skhu.app.entity.student.Student;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
