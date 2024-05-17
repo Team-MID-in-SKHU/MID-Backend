@@ -3,10 +3,8 @@ package com.skhu.mid_skhu.app.service.event;
 import com.skhu.mid_skhu.app.dto.event.requestDto.EventCreateRequestDto;
 import com.skhu.mid_skhu.app.dto.event.responseDto.EventCreateResponseDto;
 import com.skhu.mid_skhu.app.entity.event.Event;
-import com.skhu.mid_skhu.app.entity.interest.Interest;
 import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import com.skhu.mid_skhu.app.repository.EventRepository;
-import com.skhu.mid_skhu.app.repository.InterestRepository;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +22,6 @@ import java.util.stream.Collectors;
 public class EventCreateForAdminService {
 
     private final EventRepository eventRepository;
-    private final InterestRepository interestRepository;
 
     @Transactional
     public ApiResponseTemplate<EventCreateResponseDto> createEvent(EventCreateRequestDto requestDto, Principal principal) {

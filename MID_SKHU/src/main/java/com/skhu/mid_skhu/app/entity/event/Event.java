@@ -1,7 +1,6 @@
 package com.skhu.mid_skhu.app.entity.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.skhu.mid_skhu.app.entity.interest.Interest;
 import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;

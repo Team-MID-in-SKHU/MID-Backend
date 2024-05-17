@@ -1,8 +1,9 @@
 package com.skhu.mid_skhu.app.entity.student;
 
-import com.skhu.mid_skhu.app.entity.interest.Interest;
+import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
@@ -56,9 +57,13 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Column(name = "INTEREST_CATEGORY", nullable = false)
+    private List<InterestCategory> category;
+
     // Cascade 통한 엔티티 생명주기 관리 -> student 엔티티가 삭제되면 student에 속한 interest엔티티도 같이 삭제된다.
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Interest> interests = new ArrayList<>();
+//    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private List<Interest> interests = new ArrayList<>();
 
     // @JsonIgnore or @JsonManagedReference 찾아보고 JSON 직렬화 문제 관리해놓기
 }

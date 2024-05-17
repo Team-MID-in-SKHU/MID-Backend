@@ -2,13 +2,11 @@ package com.skhu.mid_skhu.app.service.interest;
 
 import com.skhu.mid_skhu.app.dto.interest.requestDto.InterestRegisterRequestDto;
 import com.skhu.mid_skhu.app.dto.interest.responseDto.InterestRegisterResponseDto;
-import com.skhu.mid_skhu.app.entity.interest.Interest;
 import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import com.skhu.mid_skhu.app.entity.student.Student;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
-import com.skhu.mid_skhu.app.repository.InterestRepository;
 import com.skhu.mid_skhu.app.repository.StudentRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +21,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class InterestRegisterService {
 
-    private final InterestRepository interestRepository;
     private final StudentRepository studentRepository;
 
-    // feat#13 으로 커밋하기
-    // 이슈파고 -> docs 브랜치 파고 -> api문서 수정하고 커밋하기
     @Transactional
     public ApiResponseTemplate<InterestRegisterResponseDto> interestRegister(InterestRegisterRequestDto requestDto, Principal principal) {
 
@@ -37,21 +32,17 @@ public class InterestRegisterService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION,
                         "학생 : " +ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage()));
 
-        List<Interest> interests = requestDto.getInterestCategoryList().stream()
-                .map(category -> {
-                    Interest interest = Interest.builder()
-                            .category(InterestCategory.convertToCategory(category))
-                            .student(student)
-                            .build();
-                    return interestRepository.save(interest);
-                })
+        List<InterestCategory> categories = requestDto.getInterestCategoryList().stream()
+                .map(InterestCategory::convertToCategory)
                 .collect(Collectors.toList());
 
-        student.getInterests().addAll(interests);
+        student.getCategory().clear();
+        student.getCategory().addAll(categories);
+        studentRepository.save(student);
 
         InterestRegisterResponseDto responseDto = InterestRegisterResponseDto.builder()
-                .interestCategoryList(interests.stream()
-                        .map(interest -> interest.getCategory().name())
+                .interestCategoryList(categories.stream()
+                        .map(InterestCategory::getDisplayName)
                         .collect(Collectors.toList()))
                 .build();
 
