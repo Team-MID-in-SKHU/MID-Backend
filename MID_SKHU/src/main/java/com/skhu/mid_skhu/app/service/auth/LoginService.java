@@ -37,7 +37,7 @@ public class LoginService {
 
         Student student = studentRepository.findByStudentNo(studentNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STUDENT_NUM_EXCEPTION,
-                        ErrorCode.NOT_FOUND_STUDENT_NUM_EXCEPTION.getMessage()));
+                        ErrorCode.NOT_FOUND_STUDENT_NUM_EXCEPTION.getMessage() + "학번: " + studentNo));
 
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), student.getPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_MISMATCH_EXCEPTION,
