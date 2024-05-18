@@ -6,6 +6,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public enum InterestCategory {
@@ -29,5 +32,11 @@ public enum InterestCategory {
 
         throw new CustomException(ErrorCode.INVALID_DISPLAY_NAME_EXCEPTION,
                 ErrorCode.INVALID_DISPLAY_NAME_EXCEPTION.getMessage());
+    }
+
+    public static List<InterestCategory> convertToCategoryList(List<String> categoryList) {
+        return categoryList.stream()
+                .map(InterestCategory::convertToCategory)
+                .collect(Collectors.toList());
     }
 }
