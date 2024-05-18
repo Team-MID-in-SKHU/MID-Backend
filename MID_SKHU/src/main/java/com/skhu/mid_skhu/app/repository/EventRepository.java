@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    List<Event> findByCategoryIn(List<InterestCategory> categories);
+    List<Event> findByCategoriesIn(List<InterestCategory> categories);
 }

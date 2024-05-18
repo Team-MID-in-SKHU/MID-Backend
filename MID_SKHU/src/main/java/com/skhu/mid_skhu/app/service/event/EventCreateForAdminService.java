@@ -54,7 +54,7 @@ public class EventCreateForAdminService {
                 .eventLocation(requestDto.getEventLocation())
                 .startAt(requestDto.getStartAt())
                 .endAt(requestDto.getEndAt())
-                .category(category)
+                .categories(category)
                 .build();
     }
 
@@ -72,7 +72,7 @@ public class EventCreateForAdminService {
                 .eventLocation(event.getEventLocation())
                 .startAt(event.getStartAt())
                 .endAt(event.getEndAt())
-                .interestCategoryList(event.getCategory().stream()
+                .interestCategoryList(event.getCategories().stream()
                         .map(InterestCategory::name)
                         .collect(Collectors.toList()))
                 .build();

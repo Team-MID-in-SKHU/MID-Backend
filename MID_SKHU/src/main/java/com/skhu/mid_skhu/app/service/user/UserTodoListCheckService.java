@@ -37,7 +37,7 @@ public class UserTodoListCheckService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION,
                         ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage() + "ID: " + userId));
 
-        List<Event> eventList = eventRepository.findByCategoryIn(student.getCategory());
+        List<Event> eventList = eventRepository.findByCategoriesIn(student.getCategory());
 
         if (eventList.isEmpty()) {
             return ApiResponseTemplate.<UserTodoListWrapperResponseDto>builder()

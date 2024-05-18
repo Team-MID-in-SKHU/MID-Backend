@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -53,7 +52,7 @@ public class Event {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Column(name = "INTEREST_CATEGORY", nullable = false)
-    private List<InterestCategory> category;
+    private List<InterestCategory> categories;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "INTEREST_ID")
