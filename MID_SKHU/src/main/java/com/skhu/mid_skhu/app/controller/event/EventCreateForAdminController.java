@@ -20,7 +20,7 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@Tag(name = "행사/이벤트 관리자용", description = "행사/이벤트를 관리하는 api그룹")
+@Tag(name = "행사/이벤트 관리자용", description = "행사/이벤트를 관리하는 관리자용 api그룹")
 @RequestMapping("/api/v1/admin/event")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class EventCreateForAdminController {
