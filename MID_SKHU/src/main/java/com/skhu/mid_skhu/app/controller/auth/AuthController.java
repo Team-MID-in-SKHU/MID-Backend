@@ -38,8 +38,8 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             })
     public ResponseEntity<ApiResponseTemplate> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
-        ApiResponseTemplate apiResponseTemplate = signUpService.signUp(signUpRequestDto);
-        return ResponseEntity.status(apiResponseTemplate.getStatus()).body(apiResponseTemplate);
+        ApiResponseTemplate data = signUpService.signUp(signUpRequestDto);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 
     @PostMapping("/login")
