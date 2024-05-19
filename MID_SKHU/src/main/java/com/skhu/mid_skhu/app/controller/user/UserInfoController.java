@@ -40,7 +40,7 @@ public class UserInfoController {
     public ResponseEntity<ApiResponseTemplate<UserInfoResponseDto>> getUserInfo(Principal principal) {
         ApiResponseTemplate<UserInfoResponseDto> apiResponseTemplate = userInfoService.getUserInfo(principal);
 
-        return new ResponseEntity<>(apiResponseTemplate, HttpStatus.OK);
+        return ResponseEntity.status(apiResponseTemplate.getStatus()).body(apiResponseTemplate);
     }
 
     @GetMapping("/todo")
