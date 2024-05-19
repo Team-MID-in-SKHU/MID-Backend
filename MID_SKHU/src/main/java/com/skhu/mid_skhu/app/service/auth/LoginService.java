@@ -30,7 +30,7 @@ public class LoginService {
 
     // Student 엔티티에 studentNo 컬럼 옵션에 Unique 추가하기
     // 토큰을 검증하는 세세한 예외처리 로직을 만들고 사용하자
-    // 학번 중복검사 api만들고 feat#8로 커밋
+
     @Transactional
     public ApiResponseTemplate<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
         String studentNo = loginRequestDto.getStudentNo();
