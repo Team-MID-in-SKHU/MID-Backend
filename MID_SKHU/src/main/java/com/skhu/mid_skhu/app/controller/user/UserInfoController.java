@@ -9,13 +9,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.awt.print.Printable;
 import java.security.Principal;
 
 @RestController
@@ -38,9 +36,9 @@ public class UserInfoController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             })
     public ResponseEntity<ApiResponseTemplate<UserInfoResponseDto>> getUserInfo(Principal principal) {
-        ApiResponseTemplate<UserInfoResponseDto> apiResponseTemplate = userInfoService.getUserInfo(principal);
+        ApiResponseTemplate<UserInfoResponseDto> data = userInfoService.getUserInfo(principal);
 
-        return ResponseEntity.status(apiResponseTemplate.getStatus()).body(apiResponseTemplate);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 
     @GetMapping("/todo")
