@@ -29,7 +29,6 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
 
     // Student 엔티티에 studentNo 컬럼 옵션에 Unique 추가하기
-    // 토큰을 검증하는 세세한 예외처리 로직을 만들고 사용하자
 
     @Transactional
     public ApiResponseTemplate<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
