@@ -28,7 +28,6 @@ public class LoginService {
     private final TokenRenewService tokenRenewService;
     private final PasswordEncoder passwordEncoder;
 
-    // Student 엔티티에 studentNo 컬럼 옵션에 Unique 추가하기
 
     @Transactional
     public ApiResponseTemplate<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
