@@ -28,7 +28,6 @@ public class LoginService {
     private final TokenRenewService tokenRenewService;
     private final PasswordEncoder passwordEncoder;
 
-
     @Transactional
     public ApiResponseTemplate<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
         String studentNo = loginRequestDto.getStudentNo();
