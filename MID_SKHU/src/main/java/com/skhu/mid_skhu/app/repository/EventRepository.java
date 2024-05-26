@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -16,4 +17,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
 
     @Query("SELECT e from Event e join e.categories c where c = :category")
     List<Event> findByCategories(String category);
+
+    List<Event> findByStartAtBetween(LocalDateTime startAt, LocalDateTime endAt);
 }

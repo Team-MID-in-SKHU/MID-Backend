@@ -50,6 +50,9 @@ public class Student {
     @Column(name = "PHONE_NUMBER", length = 14, nullable = false)
     private String phoneNumber;
 
+    @Column(name = "FCM_TOKEN", nullable = false)
+    private String fcmToken;
+
     @Column(name = "ROLE_TYPE", length = 20, nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
