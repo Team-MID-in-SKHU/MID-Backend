@@ -16,7 +16,7 @@ public class SwaggerApiConfig {
 
         Info info = new Info()
                 .title("MID_SKHU API")
-                .description("CO-FENCE API 명세서")
+                .description("MID API 명세서")
                 .version("0.0.1");
 
         String authName = "JWT 토큰";
