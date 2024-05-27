@@ -9,5 +9,6 @@ public class SignUpRequestDto {
     private String password;
     private String name;
     private String phoneNumber;
+    private String fcmToken;
     private String roleType;
 }
