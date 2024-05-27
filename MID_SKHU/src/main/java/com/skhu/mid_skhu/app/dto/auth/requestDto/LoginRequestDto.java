@@ -7,4 +7,5 @@ public class LoginRequestDto {
 
     private String studentNo;
     private String password;
+    private String fcmToken;
 }
