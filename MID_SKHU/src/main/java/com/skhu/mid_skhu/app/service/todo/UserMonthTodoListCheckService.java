@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +38,13 @@ public class UserMonthTodoListCheckService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION,
                         ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage() + "ID: " + userId));
 
-        List<Event> eventList = eventRepository.findByCategoriesIn(student.getCategory());
+        // 시간 계산
+        LocalDate startDate = YearMonth.of(requestDto.getYear(), requestDto.getMonth()).atDay(1);
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDate endDate = YearMonth.of(requestDto.getYear(), requestDto.getMonth()).atEndOfMonth();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+
+        List<Event> eventList = eventRepository.findByCategoriesInAAndStartAtBetween(student.getCategory(), startDateTime, endDateTime);
 
         if (eventList.isEmpty()) {
             return ApiResponseTemplate.<UserTodoListWrapperResponseDto>builder()
