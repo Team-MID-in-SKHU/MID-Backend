@@ -1,16 +1,21 @@
 package com.skhu.mid_skhu.app.service.fcm;
 
+import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListResponseDto;
+import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.entity.event.Event;
 import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import com.skhu.mid_skhu.app.entity.student.Student;
 import com.skhu.mid_skhu.app.repository.EventRepository;
 import com.skhu.mid_skhu.app.repository.StudentRepository;
+import com.skhu.mid_skhu.app.service.todo.UserTodayTodoListCheckService;
+import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,35 +23,35 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class EventPushAlarmSchedulerService {
 
-    private final EventRepository eventRepository;
     private final StudentRepository studentRepository;
     private final FirebaseCloudMessageService firebaseCloudMessageService;
+    private final UserTodayTodoListCheckService userTodayTodoListCheckService;
 
     @Scheduled(cron = "0 0 1 * * *")
     public void sendEventPushAlarm() throws IOException {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime threeHoursLater = now.plusHours(3);
+        List<Student> students = studentRepository.findAll();
 
-        List<Event> events = eventRepository.findByStartAtBetween(now, threeHoursLater);
+        for (Student student : students) {
+            Principal principal = () -> String.valueOf(student.getUserId());
+            ApiResponseTemplate<UserTodoListWrapperResponseDto> response  = userTodayTodoListCheckService.checkTodayTodoList(principal);
 
-        for (Event event : events) {
-            List<InterestCategory> eventCategories = event.getCategories();
-            List<Student> students = studentRepository.findAll();
+            if (response.isSuccess() && response.getData() != null) {
+                List<UserTodoListResponseDto> eventList = response.getData().getResponseDto();
 
-            for (Student student : students) {
-                List<InterestCategory> studentCategories = student.getCategory();
+                for (UserTodoListResponseDto eventDto : eventList) {
+                    LocalDateTime eventStartAt = eventDto.getStartAt();
+                    LocalDateTime threeHoursBefore = eventStartAt.minusHours(3);
+                    LocalDateTime now = LocalDateTime.now();
 
-                boolean isMatchInterested = studentCategories.stream()
-                        .anyMatch(eventCategories::contains);
+                    if (now.isAfter(threeHoursBefore) && now.isBefore(eventStartAt)) {
+                        String fcmToken = student.getFcmToken();
 
-                if (isMatchInterested) {
-                    String fcmToken = student.getFcmToken();
+                        if (fcmToken != null) {
+                            String title = "오늘 하루 일정 알림";
+                            String body = "[" + eventDto.getEventTitle() + "]" + " 일정이 3시간 뒤에 관심사에 맞는 일정이 있어요!";
 
-                    if (fcmToken != null) {
-                        String title = "일정 알림";
-                        String body = event.getTitle() + "일정이 3시간 뒤에 있어요! 일정을 확인해주세요";
-
-                        firebaseCloudMessageService.sendMessageTo(fcmToken, title, body);
+                            firebaseCloudMessageService.sendMessageTo(fcmToken, title, body);
+                        }
                     }
                 }
             }
