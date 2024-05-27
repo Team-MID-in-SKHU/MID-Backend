@@ -1,4 +1,4 @@
-package com.skhu.mid_skhu.app.service.user.todo;
+package com.skhu.mid_skhu.app.service.todo;
 
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListResponseDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;

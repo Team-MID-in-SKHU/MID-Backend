@@ -3,7 +3,7 @@ package com.skhu.mid_skhu.app.controller.user;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserInfoResponseDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.service.user.UserInfoService;
-import com.skhu.mid_skhu.app.service.user.todo.UserMonthTodoListCheckService;
+import com.skhu.mid_skhu.app.service.todo.UserMonthTodoListCheckService;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
