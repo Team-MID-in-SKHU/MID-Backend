@@ -3,6 +3,7 @@ package com.skhu.mid_skhu.app.controller.todo;
 import com.skhu.mid_skhu.app.dto.todo.requestDto.CheckMonthTodoListRequestDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.service.todo.UserMonthTodoListCheckService;
+import com.skhu.mid_skhu.app.service.todo.UserTodayTodoListCheckService;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,6 +25,7 @@ import java.security.Principal;
 public class UserTodoController {
 
     private final UserMonthTodoListCheckService userMonthTodoListCheckService;
+    private final UserTodayTodoListCheckService userTodayTodoListCheckService;
 
     @GetMapping("/month")
     @Operation(
@@ -41,4 +43,22 @@ public class UserTodoController {
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }
+
+    @GetMapping("/today")
+    @Operation(
+            summary = "나의 오늘 하루 할 일 조회",
+            description = "등록한 관심사에 맞는 본인의 오늘 하루 일정을 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "조회 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            })
+    public ResponseEntity<ApiResponseTemplate<UserTodoListWrapperResponseDto>> getUserTodayTodoList(Principal principal) {
+
+        ApiResponseTemplate<UserTodoListWrapperResponseDto> data = userTodayTodoListCheckService.checkTodayTodoList(principal);
+
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
 }
