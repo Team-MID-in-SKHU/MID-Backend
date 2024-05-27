@@ -19,4 +19,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
     List<Event> findByCategories(String category);
 
     List<Event> findByStartAtBetween(LocalDateTime startAt, LocalDateTime endAt);
+
+    List<Event> findByCategoriesInAAndStartAtBetween(List<InterestCategory> categories, LocalDateTime startAt, LocalDateTime endAt);
 }

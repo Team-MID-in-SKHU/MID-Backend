@@ -1,5 +1,6 @@
 package com.skhu.mid_skhu.app.service.todo;
 
+import com.skhu.mid_skhu.app.dto.todo.requestDto.CheckMonthTodoListRequestDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListResponseDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.entity.event.Event;
@@ -26,7 +27,7 @@ public class UserMonthTodoListCheckService {
     private final EventRepository eventRepository;
 
     @Transactional(readOnly = true)
-    public ApiResponseTemplate<UserTodoListWrapperResponseDto> checkMonthTodoList(Principal principal) {
+    public ApiResponseTemplate<UserTodoListWrapperResponseDto> checkMonthTodoList(Principal principal, CheckMonthTodoListRequestDto requestDto) {
 
         Long userId = Long.parseLong(principal.getName());
 

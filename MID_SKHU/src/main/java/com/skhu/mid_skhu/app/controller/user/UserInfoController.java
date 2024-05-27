@@ -1,5 +1,6 @@
 package com.skhu.mid_skhu.app.controller.user;
 
+import com.skhu.mid_skhu.app.dto.todo.requestDto.CheckMonthTodoListRequestDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserInfoResponseDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.service.user.UserInfoService;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,8 +53,9 @@ public class UserInfoController {
                     @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             })
-    public ResponseEntity<ApiResponseTemplate<UserTodoListWrapperResponseDto>> getUserTodoList(Principal principal) {
-        ApiResponseTemplate<UserTodoListWrapperResponseDto> data = userMonthTodoListCheckService.checkMonthTodoList(principal);
+    public ResponseEntity<ApiResponseTemplate<UserTodoListWrapperResponseDto>> getUserTodoList(Principal principal,
+                                                                                               @RequestBody CheckMonthTodoListRequestDto requestDto) {
+        ApiResponseTemplate<UserTodoListWrapperResponseDto> data = userMonthTodoListCheckService.checkMonthTodoList(principal, requestDto);
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }
