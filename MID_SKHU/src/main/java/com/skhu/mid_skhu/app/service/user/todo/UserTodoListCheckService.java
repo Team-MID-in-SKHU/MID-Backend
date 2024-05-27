@@ -1,11 +1,8 @@
-package com.skhu.mid_skhu.app.service.user;
+package com.skhu.mid_skhu.app.service.user.todo;
 
-import com.skhu.mid_skhu.app.dto.event.EventDto;
-import com.skhu.mid_skhu.app.dto.user.requestDto.UserTodoListRequestDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListResponseDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.entity.event.Event;
-import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import com.skhu.mid_skhu.app.entity.student.Student;
 import com.skhu.mid_skhu.app.repository.EventRepository;
 import com.skhu.mid_skhu.app.repository.StudentRepository;
