@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserTodoListCheckService {
+public class UserMonthTodoListCheckService {
 
     private final StudentRepository studentRepository;
     private final EventRepository eventRepository;
 
     @Transactional(readOnly = true)
-    public ApiResponseTemplate<UserTodoListWrapperResponseDto> checkTodoList(Principal principal) {
+    public ApiResponseTemplate<UserTodoListWrapperResponseDto> checkMonthTodoList(Principal principal) {
 
         Long userId = Long.parseLong(principal.getName());
 

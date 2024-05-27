@@ -3,7 +3,7 @@ package com.skhu.mid_skhu.app.controller.user;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserInfoResponseDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.service.user.UserInfoService;
-import com.skhu.mid_skhu.app.service.user.todo.UserTodoListCheckService;
+import com.skhu.mid_skhu.app.service.user.todo.UserMonthTodoListCheckService;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,7 +23,7 @@ import java.security.Principal;
 public class UserInfoController {
 
     private final UserInfoService userInfoService;
-    private final UserTodoListCheckService userTodoListCheckService;
+    private final UserMonthTodoListCheckService userMonthTodoListCheckService;
 
     @GetMapping("/info")
     @Operation(
@@ -52,7 +52,7 @@ public class UserInfoController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             })
     public ResponseEntity<ApiResponseTemplate<UserTodoListWrapperResponseDto>> getUserTodoList(Principal principal) {
-        ApiResponseTemplate<UserTodoListWrapperResponseDto> data = userTodoListCheckService.checkTodoList(principal);
+        ApiResponseTemplate<UserTodoListWrapperResponseDto> data = userMonthTodoListCheckService.checkMonthTodoList(principal);
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }
