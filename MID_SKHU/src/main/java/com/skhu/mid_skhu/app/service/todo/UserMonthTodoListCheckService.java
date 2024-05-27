@@ -44,7 +44,7 @@ public class UserMonthTodoListCheckService {
         LocalDate endDate = YearMonth.of(requestDto.getYear(), requestDto.getMonth()).atEndOfMonth();
         LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
 
-        List<Event> eventList = eventRepository.findByCategoriesInAAndStartAtBetween(student.getCategory(), startDateTime, endDateTime);
+        List<Event> eventList = eventRepository.findByCategoriesInAndStartAtBetween(student.getCategory(), startDateTime, endDateTime);
 
         if (eventList.isEmpty()) {
             return ApiResponseTemplate.<UserTodoListWrapperResponseDto>builder()
