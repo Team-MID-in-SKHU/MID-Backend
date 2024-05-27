@@ -1,11 +1,8 @@
-package com.skhu.mid_skhu.app.service.user;
+package com.skhu.mid_skhu.app.service.todo;
 
-import com.skhu.mid_skhu.app.dto.event.EventDto;
-import com.skhu.mid_skhu.app.dto.user.requestDto.UserTodoListRequestDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListResponseDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.entity.event.Event;
-import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import com.skhu.mid_skhu.app.entity.student.Student;
 import com.skhu.mid_skhu.app.repository.EventRepository;
 import com.skhu.mid_skhu.app.repository.StudentRepository;
@@ -18,27 +15,37 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserTodoListCheckService {
+public class UserTodayTodoListCheckService {
 
-    private final StudentRepository studentRepository;
     private final EventRepository eventRepository;
+    private final StudentRepository studentRepository;
 
     @Transactional(readOnly = true)
-    public ApiResponseTemplate<UserTodoListWrapperResponseDto> checkTodoList(Principal principal) {
+    public ApiResponseTemplate<UserTodoListWrapperResponseDto> checkTodayTodoList(Principal principal) {
+        LocalDateTime todayStartAt = LocalDateTime.now().toLocalDate().atStartOfDay();
+        LocalDateTime todayEndAt = todayStartAt.plusDays(1).minusNanos(1);
 
         Long userId = Long.parseLong(principal.getName());
+        Student student = getStudentById(userId);
 
-        Student student = studentRepository.findById(userId)
+        List<Event> eventList = eventRepository.findTodayEventsByCategories(student.getCategory(), todayStartAt, todayEndAt);
+
+        return createApiResponse(eventList);
+    }
+
+    private Student getStudentById(Long id) {
+        return studentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION,
-                        ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage() + "ID: " + userId));
+                        ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage() + "ID: " + id));
+    }
 
-        List<Event> eventList = eventRepository.findByCategoriesIn(student.getCategory());
-
+    private ApiResponseTemplate<UserTodoListWrapperResponseDto> createApiResponse(List<Event> eventList) {
         if (eventList.isEmpty()) {
             return ApiResponseTemplate.<UserTodoListWrapperResponseDto>builder()
                     .status(200)
@@ -48,15 +55,8 @@ public class UserTodoListCheckService {
         }
 
         List<UserTodoListResponseDto> responseDtoList = eventList.stream()
-                .map(event -> UserTodoListResponseDto.builder()
-                        .eventId(event.getId())
-                        .eventTitle(event.getTitle())
-                        .eventDescription(event.getDescription())
-                        .eventLocation(event.getEventLocation())
-                        .startAt(event.getStartAt())
-                        .endAt(event.getEndAt())
-                        .build()
-                ).collect(Collectors.toList());
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
 
         UserTodoListWrapperResponseDto wrapperResponseDto = UserTodoListWrapperResponseDto.builder()
                 .responseDto(responseDtoList)
@@ -65,8 +65,20 @@ public class UserTodoListCheckService {
         return ApiResponseTemplate.<UserTodoListWrapperResponseDto>builder()
                 .status(200)
                 .success(true)
-                .message("나의 일정 조회 성공")
+                .message("조회 성공")
                 .data(wrapperResponseDto)
+                .build();
+    }
+
+
+    private UserTodoListResponseDto convertToDto(Event event) {
+        return UserTodoListResponseDto.builder()
+                .eventId(event.getId())
+                .eventTitle(event.getTitle())
+                .eventDescription(event.getDescription())
+                .eventLocation(event.getEventLocation())
+                .startAt(event.getStartAt())
+                .endAt(event.getEndAt())
                 .build();
     }
 }

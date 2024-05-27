@@ -50,7 +50,7 @@ public class Student {
     @Column(name = "PHONE_NUMBER", length = 14, nullable = false)
     private String phoneNumber;
 
-    @Column(name = "FCM_TOKEN", nullable = false)
+    @Column(name = "FCM_TOKEN")
     private String fcmToken;
 
     @Column(name = "ROLE_TYPE", length = 20, nullable = false)
