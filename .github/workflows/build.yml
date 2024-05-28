@@ -52,31 +52,18 @@ jobs:
           port: ${{secrets.REMOTE_SSH_PORT}}
           timeout: 40s
           script: |
+            OLD_IMAGE=$(docker-compose ps -q | xargs docker inspect --format='{{.Image}}' | uniq)
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
             cd ${{secrets.REMOTE_DOCKER_PATH}}
             
-            OLD_IMAGE_ID=$(docker images -q ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}:latest)
-            
             docker-compose down
-
-            while [ $(docker ps -q --filter "status=running" | wc -l) -ne 0 ]; do
-              sleep 1
-            done
-
             docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}
             docker-compose up -d
-
-            while [ $(docker ps -q --filter "status=running" | wc -l) -ne 0 ]; do
-              sleep 1
-            done
-
-            CONTAINERS_USING_OLD_IMAGE=$(docker ps -a -q --filter "ancestor=$OLD_IMAGE_ID")
             
-            if [ -z "$CONTAINERS_USING_OLD_IMAGE" ]; then
-              if [ -n "$OLD_IMAGE_ID" ]; then
-                echo "Removing old image: $OLD_IMAGE_ID"
-                docker image rm -f $OLD_IMAGE_ID
-              fi
-            else
-              echo "Old image is still in use by the following containers: $CONTAINERS_USING_OLD_IMAGE"
+            # `docker-compose up -d`가 완전히 완료되는 것을 기다리기 위해 sleep 사용
+            sleep 30 # 필요에 따라 시간 조정
+            
+            # 이전 이미지 삭제
+            if [ ! -z "$OLD_IMAGE" ]; then
+              docker rmi $OLD_IMAGE || true
             fi
