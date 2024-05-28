@@ -66,10 +66,17 @@ jobs:
             docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}
             docker-compose up -d
 
-            while [ $(docker ps -q --filter "status=starting" | wc -l) -ne 0 ]; do
+            while [ $(docker ps -q --filter "status=running" | wc -l) -ne 0 ]; do
               sleep 1
             done
 
-            if [ -n "$OLD_IMAGE_ID" ]; then
-              docker image rm $OLD_IMAGE_ID
+            CONTAINERS_USING_OLD_IMAGE=$(docker ps -a -q --filter "ancestor=$OLD_IMAGE_ID")
+            
+            if [ -z "$CONTAINERS_USING_OLD_IMAGE" ]; then
+              if [ -n "$OLD_IMAGE_ID" ]; then
+                echo "Removing old image: $OLD_IMAGE_ID"
+                docker image rm -f $OLD_IMAGE_ID
+              fi
+            else
+              echo "Old image is still in use by the following containers: $CONTAINERS_USING_OLD_IMAGE"
             fi
