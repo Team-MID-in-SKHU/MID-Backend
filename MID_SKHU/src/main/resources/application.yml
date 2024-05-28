@@ -33,3 +33,16 @@ jwt:
 fcm:
   api_url: ${FCM_API_URL}
   fcm_config: ${FCM_CONFIG}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${S3_KEY}
+      secretKey: ${S3_SECRET_KEY}

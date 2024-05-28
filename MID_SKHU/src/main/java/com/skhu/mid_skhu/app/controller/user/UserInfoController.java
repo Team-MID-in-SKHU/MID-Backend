@@ -1,8 +1,6 @@
 package com.skhu.mid_skhu.app.controller.user;
 
-import com.skhu.mid_skhu.app.dto.todo.requestDto.CheckMonthTodoListRequestDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserInfoResponseDto;
-import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.service.user.UserInfoService;
 import com.skhu.mid_skhu.app.service.todo.UserMonthTodoListCheckService;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
@@ -12,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
