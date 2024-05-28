@@ -9,10 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -49,5 +46,20 @@ public class S3Controller {
         amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
 
         return ResponseEntity.ok(fileUrl);
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(
+            summary = "이미지 삭제",
+            description = "s3 버킷에서 이미지를 삭제합니다",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "이미지 삭제 성공"),
+                    @ApiResponse(responseCode = "400", description = "이미지 삭제 실패"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
+    public ResponseEntity<String> deleteFile(@RequestParam("fileName") String fileName) {
+        amazonS3Client.deleteObject(bucket, fileName);
+        return ResponseEntity.ok("삭제 성공");
     }
 }
