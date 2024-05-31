@@ -21,7 +21,7 @@ public class UserDetailsController {
 
     private final UserDetailsService userDetailsService;
 
-    @GetMapping("/info")
+    @GetMapping
     @Operation(
             summary = "사용자 상세 정보 조회",
             description = "현재 로그인된 사용자의 상세 정보를 조회합니다.",

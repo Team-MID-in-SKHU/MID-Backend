@@ -2,7 +2,6 @@ package com.skhu.mid_skhu.app.controller.user;
 
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserInfoResponseDto;
 import com.skhu.mid_skhu.app.service.user.UserInfoService;
-import com.skhu.mid_skhu.app.service.todo.UserMonthTodoListCheckService;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,13 +17,12 @@ import java.security.Principal;
 @RestController
 @AllArgsConstructor
 @Tag(name = "사용자", description = "사용자 정보를 관리하는 api 그룹")
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/user/info")
 public class UserInfoController {
 
     private final UserInfoService userInfoService;
-    private final UserMonthTodoListCheckService userMonthTodoListCheckService;
 
-    @GetMapping("/info")
+    @GetMapping
     @Operation(
             summary = "마이페이지 정보 조회",
             description = "현재 로그인된 사용자의 마이페이지 정보를 조회합니다.",
