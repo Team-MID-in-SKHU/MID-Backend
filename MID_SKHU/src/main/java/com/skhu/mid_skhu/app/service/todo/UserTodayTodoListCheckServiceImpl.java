@@ -6,6 +6,7 @@ import com.skhu.mid_skhu.app.entity.event.Event;
 import com.skhu.mid_skhu.app.entity.student.Student;
 import com.skhu.mid_skhu.app.repository.EventRepository;
 import com.skhu.mid_skhu.app.repository.StudentRepository;
+import com.skhu.mid_skhu.app.service.fcm.alarmInterface.UserTodayTodoListCheckService;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
@@ -21,11 +22,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserTodayTodoListCheckService {
+public class UserTodayTodoListCheckServiceImpl implements UserTodayTodoListCheckService {
 
     private final EventRepository eventRepository;
     private final StudentRepository studentRepository;
 
+    @Override
     @Transactional(readOnly = true)
     public ApiResponseTemplate<UserTodoListWrapperResponseDto> checkTodayTodoList(Principal principal) {
         LocalDateTime todayStartAt = LocalDateTime.now().toLocalDate().atStartOfDay();
