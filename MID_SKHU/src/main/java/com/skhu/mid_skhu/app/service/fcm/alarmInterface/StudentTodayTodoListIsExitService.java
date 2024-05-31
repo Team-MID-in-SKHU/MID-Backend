@@ -4,6 +4,6 @@ import com.skhu.mid_skhu.app.entity.student.Student;
 
 import java.util.List;
 
-public interface StudentTodayTodoListCheckService {
+public interface StudentTodayTodoListIsExitService {
     List<Student> getStudentListExistTodayTodoList();
 }
