@@ -41,17 +41,16 @@ public class EventPushAlarmSchedulerService {
             Principal principal = () -> String.valueOf(student.getUserId());
             ApiResponseTemplate<UserTodoListWrapperResponseDto> response = userTodayTodoListCheckService.checkTodayTodoList(principal);
 
-            if (!response.isSuccess() && response.getData() == null) {
-                return;
-            }
-            List<UserTodoListResponseDto> eventList = response.getData().getResponseDto();
+            if (!response.isSuccess()) {
+                List<UserTodoListResponseDto> eventList = response.getData().getResponseDto();
 
-            for (UserTodoListResponseDto eventDto : eventList) {
-                if (shouldSendNotification(eventDto)) {
-                    String fcmToken = student.getFcmToken();
-                    if (fcmToken != null) {
-                        String[] message = createNotificationMessage(eventDto);
-                        sendNotificationToStudent(fcmToken, message[0], message[1]);
+                for (UserTodoListResponseDto eventDto : eventList) {
+                    if (shouldSendNotification(eventDto)) {
+                        String fcmToken = student.getFcmToken();
+                        if (fcmToken != null) {
+                            String[] message = createNotificationMessage(eventDto);
+                            sendNotificationToStudent(fcmToken, message[0], message[1]);
+                        }
                     }
                 }
             }

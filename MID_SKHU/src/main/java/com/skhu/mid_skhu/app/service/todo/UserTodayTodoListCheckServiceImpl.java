@@ -53,6 +53,7 @@ public class UserTodayTodoListCheckServiceImpl implements UserTodayTodoListCheck
                     .status(200)
                     .success(true)
                     .message("조회에는 성공했으나 등록한 관심사에 맞는 이벤트 일정이 없습니다.")
+                    .data(UserTodoListWrapperResponseDto.builder().responseDto(List.of()).build())
                     .build();
         }
 
