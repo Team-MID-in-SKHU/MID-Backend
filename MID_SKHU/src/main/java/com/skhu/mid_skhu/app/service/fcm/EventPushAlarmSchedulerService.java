@@ -2,15 +2,9 @@ package com.skhu.mid_skhu.app.service.fcm;
 
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListResponseDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
-import com.skhu.mid_skhu.app.entity.event.Event;
-import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import com.skhu.mid_skhu.app.entity.student.Student;
-import com.skhu.mid_skhu.app.repository.EventRepository;
-import com.skhu.mid_skhu.app.repository.StudentRepository;
-import com.skhu.mid_skhu.app.service.todo.UserTodayTodoListCheckService;
+import com.skhu.mid_skhu.app.service.todo.UserTodayTodoListCheckServiceImpl;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
-import com.skhu.mid_skhu.global.exception.ErrorCode;
-import com.skhu.mid_skhu.global.exception.model.CustomException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,9 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class EventPushAlarmSchedulerService {
 
-    private final FirebaseCloudMessageService firebaseCloudMessageService;
-    private final UserTodayTodoListCheckService userTodayTodoListCheckService;
-    private final StudentTodayTodoListIsExitService studentTodayTodoListIsExitService;
+    private final FirebaseCloudMessageServiceImpl firebaseCloudMessageServiceImpl;
+    private final UserTodayTodoListCheckServiceImpl userTodayTodoListCheckServiceImpl;
+    private final StudentTodayTodoListIsExitServiceImpl studentTodayTodoListIsExitServiceImpl;
 
     @Scheduled(cron = "0 0 1 * * *")
     public void sendEventPushAlarm() throws IOException {
@@ -37,13 +31,13 @@ public class EventPushAlarmSchedulerService {
     }
 
     private List<Student> getStudentsTodayTodoList() {
-        return studentTodayTodoListIsExitService.getStudentListExistTodayTodoList();
+        return studentTodayTodoListIsExitServiceImpl.getStudentListExistTodayTodoList();
     }
 
     private void sendNotificationsForTodayEvents(List<Student> students) throws IOException {
         for (Student student : students) {
             Principal principal = () -> String.valueOf(student.getUserId());
-            ApiResponseTemplate<UserTodoListWrapperResponseDto> response = userTodayTodoListCheckService.checkTodayTodoList(principal);
+            ApiResponseTemplate<UserTodoListWrapperResponseDto> response = userTodayTodoListCheckServiceImpl.checkTodayTodoList(principal);
 
             if (!response.isSuccess() && response.getData() == null) {
                 return;
@@ -77,6 +71,6 @@ public class EventPushAlarmSchedulerService {
     }
 
     private void sendNotificationToStudent(String fcmToken, String title, String body) throws IOException {
-        firebaseCloudMessageService.sendMessageTo(fcmToken, title, body);
+        firebaseCloudMessageServiceImpl.sendMessageTo(fcmToken, title, body);
     }
 }
