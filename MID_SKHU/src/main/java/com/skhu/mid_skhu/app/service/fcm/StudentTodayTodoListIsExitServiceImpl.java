@@ -5,7 +5,7 @@ import com.skhu.mid_skhu.app.entity.interest.InterestCategory;
 import com.skhu.mid_skhu.app.entity.student.Student;
 import com.skhu.mid_skhu.app.repository.EventRepository;
 import com.skhu.mid_skhu.app.repository.StudentRepository;
-import com.skhu.mid_skhu.app.service.fcm.alarmInterface.StudentTodayTodoListCheckService;
+import com.skhu.mid_skhu.app.service.fcm.alarmInterface.StudentTodayTodoListIsExitService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudentTodayTodoListIsExitServiceImpl implements StudentTodayTodoListCheckService {
+public class StudentTodayTodoListIsExitServiceImpl implements StudentTodayTodoListIsExitService {
 
     private final EventRepository eventRepository;
     private final StudentRepository studentRepository;
