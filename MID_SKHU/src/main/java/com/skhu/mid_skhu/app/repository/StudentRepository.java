@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
@@ -16,4 +17,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Optional<Student> findByStudentNo(String studentNo);
 
     List<Student> findAllByCategory(InterestCategory category);
+
+    List<Student> findByCategoryIn(Set<InterestCategory> categories);
 }
