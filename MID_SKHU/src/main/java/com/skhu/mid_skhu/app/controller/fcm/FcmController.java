@@ -35,7 +35,6 @@ public class FcmController {
 
     )
     public ResponseEntity pushMessage(@RequestBody FcmRequestDto fcmRequestDto) throws IOException {
-        System.out.println(fcmRequestDto.getTargetToken() + " " + fcmRequestDto.getTitle() + " " + fcmRequestDto.getBody());
 
         firebaseCloudMessageServiceImpl.sendMessageTo(
                 fcmRequestDto.getTargetToken(),
