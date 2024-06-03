@@ -1,7 +1,7 @@
 package com.skhu.mid_skhu.app.controller.fcm;
 
 import com.skhu.mid_skhu.app.dto.fcm.FcmRequestDto;
-import com.skhu.mid_skhu.app.service.fcm.FirebaseCloudMessageService;
+import com.skhu.mid_skhu.app.service.fcm.FirebaseCloudMessageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +21,7 @@ import java.io.IOException;
 @RequestMapping("/api/v1/fcm")
 public class FcmController {
 
-    private final FirebaseCloudMessageService firebaseCloudMessageService;
+    private final FirebaseCloudMessageServiceImpl firebaseCloudMessageServiceImpl;
 
     @PostMapping("/push")
     @Operation(
@@ -37,7 +37,7 @@ public class FcmController {
     public ResponseEntity pushMessage(@RequestBody FcmRequestDto fcmRequestDto) throws IOException {
         System.out.println(fcmRequestDto.getTargetToken() + " " + fcmRequestDto.getTitle() + " " + fcmRequestDto.getBody());
 
-        firebaseCloudMessageService.sendMessageTo(
+        firebaseCloudMessageServiceImpl.sendMessageTo(
                 fcmRequestDto.getTargetToken(),
                 fcmRequestDto.getTitle(),
                 fcmRequestDto.getBody());

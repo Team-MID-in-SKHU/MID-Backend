@@ -3,7 +3,7 @@ package com.skhu.mid_skhu.app.controller.todo;
 import com.skhu.mid_skhu.app.dto.todo.requestDto.CheckMonthTodoListRequestDto;
 import com.skhu.mid_skhu.app.dto.user.responseDto.UserTodoListWrapperResponseDto;
 import com.skhu.mid_skhu.app.service.todo.UserMonthTodoListCheckService;
-import com.skhu.mid_skhu.app.service.todo.UserTodayTodoListCheckService;
+import com.skhu.mid_skhu.app.service.todo.UserTodayTodoListCheckServiceImpl;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,7 +25,7 @@ import java.security.Principal;
 public class UserTodoController {
 
     private final UserMonthTodoListCheckService userMonthTodoListCheckService;
-    private final UserTodayTodoListCheckService userTodayTodoListCheckService;
+    private final UserTodayTodoListCheckServiceImpl userTodayTodoListCheckServiceImpl;
 
     @GetMapping("/month")
     @Operation(
@@ -56,7 +56,7 @@ public class UserTodoController {
             })
     public ResponseEntity<ApiResponseTemplate<UserTodoListWrapperResponseDto>> getUserTodayTodoList(Principal principal) {
 
-        ApiResponseTemplate<UserTodoListWrapperResponseDto> data = userTodayTodoListCheckService.checkTodayTodoList(principal);
+        ApiResponseTemplate<UserTodoListWrapperResponseDto> data = userTodayTodoListCheckServiceImpl.checkTodayTodoList(principal);
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }

@@ -24,4 +24,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
 
     @Query("SELECT e FROM Event e JOIN e.categories c WHERE c IN :categories AND e.startAt BETWEEN :startAt AND :endAt")
     List<Event> findTodayEventsByCategories(List<InterestCategory> categories, LocalDateTime startAt, LocalDateTime endAt);
+
+    List<Event> findAllByStartAtBetween(LocalDateTime startAt, LocalDateTime endAt);
 }
