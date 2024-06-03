@@ -8,6 +8,7 @@ public class SignUpRequestDto {
     private String studentNo;
     private String password;
     private String name;
+    private String department;
     private String phoneNumber;
     private String fcmToken;
     private String roleType;

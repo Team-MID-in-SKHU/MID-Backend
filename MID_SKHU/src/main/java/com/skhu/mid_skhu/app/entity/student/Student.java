@@ -46,6 +46,9 @@ public class Student {
     @Column(name = "STUDENT_NAME", length = 10, nullable = false)
     private String name;
 
+    @Column(name = "STUDENT_DEPARTMENT", length = 20, nullable = false)
+    private String department;
+
     @JsonIgnore
     @Column(name = "PHONE_NUMBER", length = 14, nullable = false)
     private String phoneNumber;

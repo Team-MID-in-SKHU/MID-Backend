@@ -31,6 +31,7 @@ public class UserInfoService {
         UserInfoResponseDto responseDto = UserInfoResponseDto.builder()
                 .studentNo(student.getStudentNo())
                 .name(student.getName())
+                .department(student.getDepartment())
                 .roleType(student.getRoleType())
                 .build();
 
