@@ -6,14 +6,16 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.net.HttpHeaders;
 import com.google.gson.JsonParseException;
 import com.skhu.mid_skhu.app.dto.fcm.FcmMessage;
+import com.skhu.mid_skhu.app.service.fcm.alarmInterface.FirebaseCloudMessageService;
 import lombok.RequiredArgsConstructor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
@@ -23,8 +25,9 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class FirebaseCloudMessageService {
+public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageService {
 
+    private static final Logger log = LoggerFactory.getLogger(FirebaseCloudMessageServiceImpl.class);
     @Value("${fcm.api_url}")
     private String API_URL;
 
@@ -33,6 +36,7 @@ public class FirebaseCloudMessageService {
 
     private final ObjectMapper objectMapper;
 
+    @Override
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
         String message = makeMessage(targetToken, title, body);
 
@@ -46,8 +50,7 @@ public class FirebaseCloudMessageService {
                 .build();
 
         Response response = client.newCall(request).execute();
-
-        System.out.println(response.body().string());
+        log.info("FCM response : {}", response.body().string());
     }
 
     private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
