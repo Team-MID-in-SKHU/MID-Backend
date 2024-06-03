@@ -32,6 +32,7 @@ public class UserDetailsService {
                 .studentNo(student.getStudentNo())
                 .name(student.getName())
                 .phoneNumber(student.getPhoneNumber())
+                .department(student.getDepartment())
                 .roleType(student.getRoleType())
                 .category(student.getCategory())
                 .build();
