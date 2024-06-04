@@ -7,6 +7,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,5 +35,29 @@ public class UserAccountController {
     public ResponseEntity<String> logout() {
         userAccountService.logout();
         return ResponseEntity.status(HttpStatus.OK).body("로그아웃 성공");
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(
+            summary = "회원 탈퇴",
+            description = "현재 로그인된 사용자의 계정을 삭제합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            })
+    public ResponseEntity<String> deleteUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        Long userId;
+        if (principal instanceof UserDetails) {
+            userId = Long.parseLong(((UserDetails) principal).getUsername());
+        } else {
+            userId = Long.parseLong(principal.toString());
+        }
+
+        userAccountService.deleteUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body("회원 탈퇴 성공");
     }
 }
