@@ -10,5 +10,6 @@ public class UserInfoResponseDto {
 
     private String studentNo;
     private String name;
+    private String department;
     private RoleType roleType;
 }

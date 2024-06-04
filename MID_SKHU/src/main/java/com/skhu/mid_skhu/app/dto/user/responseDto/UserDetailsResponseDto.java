@@ -14,6 +14,7 @@ public class UserDetailsResponseDto {
     private String studentNo;
     private String name;
     private String phoneNumber;
+    private String department;
     private RoleType roleType;
     private List<InterestCategory> category;
 }

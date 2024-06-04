@@ -46,6 +46,7 @@ public class SignUpService {
                 .studentNo(signUpRequestDto.getStudentNo())
                 .password(signUpRequestDto.getPassword())
                 .name(signUpRequestDto.getName())
+                .department(signUpRequestDto.getDepartment())
                 .phoneNumber(signUpRequestDto.getPhoneNumber())
                 .fcmToken(signUpRequestDto.getFcmToken())
                 .roleType(roleType)
