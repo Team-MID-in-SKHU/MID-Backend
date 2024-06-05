@@ -7,7 +7,9 @@ import com.skhu.mid_skhu.global.jwt.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,9 +34,19 @@ public class UserAccountService {
     }
 
     @Transactional
-    public void deleteUser(Long userId) {
+    public void deleteUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        Long userId;
+        if (principal instanceof UserDetails) {
+            userId = Long.parseLong(((UserDetails) principal).getUsername());
+        } else {
+            userId = Long.parseLong(principal.toString());
+        }
+
         Student student = studentRepository.findById(userId)
-                        .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
 
         studentRefreshTokenRepository.deleteByStudent(student);
         studentRepository.deleteById(userId);
