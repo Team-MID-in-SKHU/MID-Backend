@@ -1,6 +1,7 @@
 package com.skhu.mid_skhu.global.jwt;
 
 import com.skhu.mid_skhu.app.entity.student.Student;
+import com.skhu.mid_skhu.app.repository.TokenBlacklistRepository;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
 import io.jsonwebtoken.Claims;
@@ -32,15 +33,19 @@ public class TokenProvider {
     private final Key key;
     private final long accessTokenValidityTime;
     private final long refreshTokenValidityTime;
+    private final TokenBlacklistRepository tokenBlacklistRepository;
 
-    public TokenProvider(@Value("${jwt.secret}") String secretKey,
+    public TokenProvider(TokenBlacklistRepository tokenBlacklistRepository,
+                         @Value("${jwt.secret}") String secretKey,
                          @Value("${jwt.access-token-validity-in-milliseconds}") long accessTokenValidityTime,
                          @Value("${jwt.refresh-token-validity-in-milliseconds}") long refreshTokenValidityTime) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenValidityTime = accessTokenValidityTime;
         this.refreshTokenValidityTime = refreshTokenValidityTime;
+        this.tokenBlacklistRepository = tokenBlacklistRepository;
     }
+
     public String createRefreshToken(Student student) {
         long nowTime = (new Date().getTime());
 
@@ -99,7 +104,7 @@ public class TokenProvider {
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(),"", authorities);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), "", authorities);
         authentication.setDetails(claims);
 
         return authentication;
@@ -117,6 +122,9 @@ public class TokenProvider {
 
     public boolean validateToken(String token) {
         try {
+            if (tokenBlacklistRepository.isTokenBlacklisted(token)) {
+                return false;
+            }
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
@@ -125,5 +133,9 @@ public class TokenProvider {
         } catch (UnsupportedJwtException | ExpiredJwtException | IllegalArgumentException e) {
             return false;
         }
+    }
+
+    public void invalidateToken(String token) {
+        tokenBlacklistRepository.addTokenToBlacklist(token, refreshTokenValidityTime);
     }
 }
