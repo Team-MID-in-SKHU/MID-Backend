@@ -17,13 +17,14 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class S3ImageFileServiceImpl {
+public class S3ImageFileServiceImpl implements S3ImageFileService{
 
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Override
     public String uploadImageFile(MultipartFile imageFile, String directory) throws IOException {
         String imageFileName = sanitizeImageFileName(imageFile.getOriginalFilename());
         String imageFileUrl = "https://" + bucket + "/" + directory + "/" + imageFileName;
