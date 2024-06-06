@@ -41,6 +41,7 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
         return imageFileUrl;
     }
 
+    @Override
     public List<String> uploadImageFiles(List<MultipartFile> imageFiles, String directory) {
         List<String> imageFileUrls;
 
