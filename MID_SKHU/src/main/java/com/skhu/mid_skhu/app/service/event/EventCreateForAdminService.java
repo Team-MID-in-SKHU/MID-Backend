@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -34,9 +35,9 @@ public class EventCreateForAdminService {
                     ErrorCode.NOT_FOUND_CATEGORY_IN_INTEREST_EXCEPTION.getMessage() + "\n" + category);
         }
 
-//        List<String> imagesUrl = s3ImageFileService.uploadImageFile(requestDto.getImages(), "event");
+        List<String> imagesUrl = uploadImages(requestDto.getImages(), "event");
 
-        Event event = createEventEntity(requestDto, category);
+        Event event = createEventEntity(requestDto, category, imagesUrl);
         eventRepository.save(event);
 
         EventCreateResponseDto responseDto = createEventRegistrationResponseDto(event);
@@ -49,7 +50,8 @@ public class EventCreateForAdminService {
                 .build();
     }
 
-    private Event createEventEntity(EventCreateRequestDto requestDto, List<InterestCategory> category) {
+    private Event createEventEntity(EventCreateRequestDto requestDto,
+                                    List<InterestCategory> category, List<String> imageUrls) {
 
         return Event.builder()
                 .title(requestDto.getTitle())
@@ -58,6 +60,7 @@ public class EventCreateForAdminService {
                 .startAt(requestDto.getStartAt())
                 .endAt(requestDto.getEndAt())
                 .categories(category)
+                .imageUrls(imageUrls)
                 .build();
     }
 
@@ -66,6 +69,10 @@ public class EventCreateForAdminService {
                 .map(String::toUpperCase)
                 .map(InterestCategory::convertToCategory)
                 .collect(Collectors.toList());
+    }
+
+    private List<String> uploadImages(List<MultipartFile> files, String directory) {
+        return s3ImageFileService.uploadImageFiles(files, directory);
     }
 
     private EventCreateResponseDto createEventRegistrationResponseDto(Event event) {
@@ -78,6 +85,7 @@ public class EventCreateForAdminService {
                 .interestCategoryList(event.getCategories().stream()
                         .map(InterestCategory::name)
                         .collect(Collectors.toList()))
+                .imageUrls(event.getImageUrls())
                 .build();
     }
 }

@@ -15,6 +15,7 @@ public class EventCreateResponseDto {
     private String title;
     private String description;
     private String eventLocation;
+    private List<String> imageUrls;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
     private List<String> interestCategoryList;
