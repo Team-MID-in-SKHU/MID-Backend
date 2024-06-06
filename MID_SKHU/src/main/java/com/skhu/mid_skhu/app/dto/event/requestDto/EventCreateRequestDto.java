@@ -1,6 +1,7 @@
 package com.skhu.mid_skhu.app.dto.event.requestDto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,4 +15,5 @@ public class EventCreateRequestDto {
     private LocalDateTime startAt;
     private LocalDateTime endAt;
     private List<String> interestCategoryList;
+    private List<MultipartFile> images;
 }
