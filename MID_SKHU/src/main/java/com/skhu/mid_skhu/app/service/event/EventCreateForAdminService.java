@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class EventCreateForAdminService {
 
     private final EventRepository eventRepository;
+    private final S3ImageFileService s3ImageFileService;
 
     @Transactional
     public ApiResponseTemplate<EventCreateResponseDto> createEvent(EventCreateRequestDto requestDto, Principal principal) {
@@ -32,6 +33,8 @@ public class EventCreateForAdminService {
             throw new CustomException(ErrorCode.NOT_FOUND_CATEGORY_IN_INTEREST_EXCEPTION,
                     ErrorCode.NOT_FOUND_CATEGORY_IN_INTEREST_EXCEPTION.getMessage() + "\n" + category);
         }
+
+//        List<String> imagesUrl = s3ImageFileService.uploadImageFile(requestDto.getImages(), "event");
 
         Event event = createEventEntity(requestDto, category);
         eventRepository.save(event);

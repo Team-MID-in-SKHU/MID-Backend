@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,6 +39,24 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
         amazonS3Client.putObject(bucket, directory + "/" + imageFileName, imageFile.getInputStream(), metadata);
 
         return imageFileUrl;
+    }
+
+    public List<String> uploadImageFiles(List<MultipartFile> imageFiles, String directory) {
+        List<String> imageFileUrls;
+
+        imageFileUrls = imageFiles.stream()
+                .filter(multipartFile -> !multipartFile.isEmpty())
+                .map(multipartFile -> {
+                    try {
+                        return uploadImageFile(multipartFile, directory);
+                    } catch (IOException e) {
+                        throw new CustomException(ErrorCode.FAILED_UPLOAD_IMAGE_FILE_EXCEPTION,
+                                ErrorCode.FAILED_UPLOAD_IMAGE_FILE_EXCEPTION.getMessage());
+                    }
+                })
+                .collect(Collectors.toList());
+
+        return imageFileUrls;
     }
 
     private String sanitizeImageFileName(String imageFileName) {
