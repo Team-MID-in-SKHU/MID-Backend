@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class S3ImageFileService {
+public class S3ImageFileServiceImpl {
 
     private final AmazonS3Client amazonS3Client;
 
