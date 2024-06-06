@@ -44,6 +44,10 @@ public class Event {
     @Column(name = "EVENT_LOCATION", nullable = false)
     private String eventLocation;
 
+    @Column(name = "EVENT_IMAGES")
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> imageUrls;
+
     @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime startAt;
 
