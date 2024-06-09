@@ -2,6 +2,7 @@ package com.skhu.mid_skhu.app.controller.event;
 
 import com.skhu.mid_skhu.app.dto.event.responseDto.EventSearchResponseDto;
 import com.skhu.mid_skhu.app.service.event.EventDisplayService;
+import com.skhu.mid_skhu.app.service.event.EventSearchService;
 import com.skhu.mid_skhu.app.service.event.RandomEventDisplayService;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +25,7 @@ import java.util.List;
 public class EventDisplayController {
 
     private final EventDisplayService eventDisplayService;
+    private final EventSearchService eventSearchService;
     private final RandomEventDisplayService randomEventDisplayService;
 
     @GetMapping("/display")
@@ -53,5 +56,20 @@ public class EventDisplayController {
     public ResponseEntity<ApiResponseTemplate<List<EventSearchResponseDto>>> displayRandomEvents() {
         ApiResponseTemplate<List<EventSearchResponseDto>> dataList = randomEventDisplayService.displayRandomEvents();
         return ResponseEntity.status(dataList.getStatus()).body(dataList);
+    }
+
+    @GetMapping("/{title}")
+    @Operation(
+            summary = "이벤트 이름으로 조회",
+            description = "이벤트 이름에 부분 일치하는 이벤트를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "이벤트 이름으로 조회 성공"),
+                    @ApiResponse(responseCode = "403", description = "URL문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<List<EventSearchResponseDto>>> findByPartialTitle(@PathVariable("title") String partialTitle) {
+        ApiResponseTemplate<List<EventSearchResponseDto>> response = eventSearchService.findByPartialTitle(partialTitle);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 }

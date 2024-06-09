@@ -32,4 +32,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
 
     @Query("SELECT e FROM Event e WHERE e.endAt > :currentTime ORDER BY e.endAt ASC")
     List<Event> findEventsWithNearestEndAt(LocalDateTime currentTime);
+
+    List<Event> findByTitleContaining(String partialTitle);
 }

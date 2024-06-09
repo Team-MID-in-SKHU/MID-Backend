@@ -26,7 +26,7 @@ public class EventSearchService {
 
     @Transactional(readOnly = true)
     public ApiResponseTemplate<List<EventSearchResponseDto>> searchEvents(Principal principal,
-                                                                    EventSearchRequestDto eventSearchRequestDto) {
+                                                                          EventSearchRequestDto eventSearchRequestDto) {
 
         List<InterestCategory> categories = InterestCategory.convertToCategoryList(eventSearchRequestDto.getCategoryList());
 
@@ -42,6 +42,35 @@ public class EventSearchService {
                     ErrorCode.NOT_FOUND_EVENT_DATA_EXCEPTION.getMessage());
         }
 
+
+        List<EventSearchResponseDto> responseDtoList = events.stream()
+                .map(event -> EventSearchResponseDto.builder()
+                        .eventTitle(event.getTitle())
+                        .eventDescription(event.getDescription())
+                        .eventLocation(event.getEventLocation())
+                        .startAt(event.getStartAt())
+                        .endAt(event.getEndAt())
+                        .category(event.getCategories().stream()
+                                .map(InterestCategory::getCode)
+                                .collect(Collectors.toList()))
+                        .build()
+                ).collect(Collectors.toList());
+
+        return ApiResponseTemplate.<List<EventSearchResponseDto>>builder()
+                .status(200)
+                .success(true)
+                .message("조회 성공")
+                .data(responseDtoList)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ApiResponseTemplate<List<EventSearchResponseDto>> findByPartialTitle(String partialTitle) {
+        List<Event> events = eventRepository.findByTitleContaining(partialTitle);
+        if (events.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_EVENT_DATA_EXCEPTION,
+                    ErrorCode.NOT_FOUND_EVENT_DATA_EXCEPTION.getMessage());
+        }
 
         List<EventSearchResponseDto> responseDtoList = events.stream()
                 .map(event -> EventSearchResponseDto.builder()
