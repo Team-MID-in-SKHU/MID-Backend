@@ -53,6 +53,7 @@ public class EventSearchService {
                         .category(event.getCategories().stream()
                                 .map(InterestCategory::getCode)
                                 .collect(Collectors.toList()))
+                        .imageUrls(event.getImageUrls())
                         .build()
                 ).collect(Collectors.toList());
 
