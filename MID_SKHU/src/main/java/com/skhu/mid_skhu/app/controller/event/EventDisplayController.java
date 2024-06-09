@@ -36,8 +36,10 @@ public class EventDisplayController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<List<EventSearchResponseDto>>> displayOneOngoingAndOneEndingEvent() {
-        ApiResponseTemplate<List<EventSearchResponseDto>> response = eventDisplayService.displayOneOngoingAndOneEndingEvent();
-        return ResponseEntity.status(response.getStatus()).body(response);
+
+        ApiResponseTemplate<List<EventSearchResponseDto>> dataList = eventDisplayService.displayOneOngoingAndOneEndingEvent();
+
+        return ResponseEntity.status(dataList.getStatus()).body(dataList);
     }
 
     @GetMapping("/random")
@@ -51,7 +53,9 @@ public class EventDisplayController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<List<EventSearchResponseDto>>> displayRandomEvents() {
-        ApiResponseTemplate<List<EventSearchResponseDto>> response = randomEventDisplayService.displayRandomEvents();
-        return ResponseEntity.status(response.getStatus()).body(response);
+
+        ApiResponseTemplate<List<EventSearchResponseDto>> dataList = randomEventDisplayService.displayRandomEvents();
+
+        return ResponseEntity.status(dataList.getStatus()).body(dataList);
     }
 }
