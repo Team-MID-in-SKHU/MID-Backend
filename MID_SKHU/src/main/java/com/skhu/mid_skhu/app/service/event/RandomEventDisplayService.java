@@ -11,7 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,34 +27,34 @@ public class RandomEventDisplayService {
 
     @Transactional(readOnly = true)
     public ApiResponseTemplate<List<EventSearchResponseDto>> displayRandomEvents() {
-        List<Event> events = eventRepository.findAll();
-        if (events.isEmpty()) {
+        List<Event> ongoingEvents = eventRepository.findOngoingEvents(LocalDateTime.now());
+        if (ongoingEvents.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_EVENT_DATA_EXCEPTION,
                     ErrorCode.NOT_FOUND_EVENT_DATA_EXCEPTION.getMessage());
         }
 
         List<EventSearchResponseDto> responseDtoList = new ArrayList<>();
         Random random = new Random();
-        int eventCount = events.size();
-        Set<Integer> selectedIndex = new HashSet<>();
-        for (int i = 0; i < 2; i++) {
-            int randomIndex;
-            do {
-                randomIndex = random.nextInt(eventCount);
-            } while (!selectedIndex.add(randomIndex));
-
-            Event randomEvent = events.get(randomIndex);
-            EventSearchResponseDto responseDto = EventSearchResponseDto.builder()
-                    .eventTitle(randomEvent.getTitle())
-                    .eventDescription(randomEvent.getDescription())
-                    .eventLocation(randomEvent.getEventLocation())
-                    .startAt(randomEvent.getStartAt())
-                    .endAt(randomEvent.getEndAt())
-                    .category(randomEvent.getCategories().stream()
-                            .map(category -> category.getCode())
-                            .collect(Collectors.toList()))
-                    .build();
-            responseDtoList.add(responseDto);
+        int eventCount = ongoingEvents.size();
+        int maxEventsToDisplay = Math.min(eventCount, 2);
+        Set<Integer> selectedIndexes = new HashSet<>();
+        while (selectedIndexes.size() < maxEventsToDisplay) {
+            int randomIndex = random.nextInt(eventCount);
+            if (!selectedIndexes.contains(randomIndex)) {
+                selectedIndexes.add(randomIndex);
+                Event randomEvent = ongoingEvents.get(randomIndex);
+                EventSearchResponseDto responseDto = EventSearchResponseDto.builder()
+                        .eventTitle(randomEvent.getTitle())
+                        .eventDescription(randomEvent.getDescription())
+                        .eventLocation(randomEvent.getEventLocation())
+                        .startAt(randomEvent.getStartAt())
+                        .endAt(randomEvent.getEndAt())
+                        .category(randomEvent.getCategories().stream()
+                                .map(category -> category.getCode())
+                                .collect(Collectors.toList()))
+                        .build();
+                responseDtoList.add(responseDto);
+            }
         }
 
         return ApiResponseTemplate.<List<EventSearchResponseDto>>builder()
