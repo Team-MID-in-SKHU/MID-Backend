@@ -1,8 +1,10 @@
 package com.skhu.mid_skhu.app.controller.event;
 
 import com.skhu.mid_skhu.app.dto.event.requestDto.EventCreateRequestDto;
+import com.skhu.mid_skhu.app.dto.event.requestDto.EventUpdateRequestDto;
 import com.skhu.mid_skhu.app.dto.event.responseDto.EventCreateResponseDto;
 import com.skhu.mid_skhu.app.service.event.EventCreateForAdminService;
+import com.skhu.mid_skhu.app.service.event.EventModifyService;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -26,9 +29,10 @@ import java.util.List;
 @Tag(name = "행사/이벤트 ADMIN용", description = "행사/이벤트를 관리하는 ADMIN용 api그룹")
 @RequestMapping("/api/v1/admin/event")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
-public class EventCreateForAdminController {
+public class EventForAdminController {
 
     private final EventCreateForAdminService eventCreateForAdminService;
+    private final EventModifyService eventModifyService;
 
     @PostMapping("/create")
     @Operation(
@@ -46,6 +50,23 @@ public class EventCreateForAdminController {
             Principal principal) {
 
         ApiResponseTemplate<EventCreateResponseDto> data = eventCreateForAdminService.createEvent(requestDto, images, principal);
+
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @PutMapping("/update")
+    @Operation(
+            summary = "행사/이벤트 수정",
+            description = "행사/이벤트를 수정합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "행사/이벤트 생성 성공"),
+                    @ApiResponse(responseCode = "403", description = "url문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<String>> updateEvent(@RequestBody EventUpdateRequestDto requestDto, Principal principal) {
+
+        ApiResponseTemplate<String> data = eventModifyService.updateEventDetail(principal, requestDto);
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }
