@@ -1,7 +1,9 @@
 package com.skhu.mid_skhu.app.service.event;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.skhu.mid_skhu.global.config.S3Config;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
 import lombok.AccessLevel;
@@ -71,5 +73,9 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
             throw new CustomException(ErrorCode.INVALID_FILE_TYPE_EXCEPTION,
                     ErrorCode.INVALID_FILE_TYPE_EXCEPTION.getMessage() + "파일명: "+ fileName);
         }
+    }
+
+    public void deleteFile(String fileName) {
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 }
