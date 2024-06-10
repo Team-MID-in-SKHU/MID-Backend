@@ -41,7 +41,9 @@ public class EventCreateForAdminService {
 
         List<GetS3Resource> imagesUrl = uploadImages(images, "event");
 
-        Event event = createEventEntity(requestDto, category, imagesUrl.stream()
+        Long writerId = Long.parseLong(principal.getName());
+
+        Event event = createEventEntity(requestDto, category, writerId, imagesUrl.stream()
                 .map(GetS3Resource::getImageUrl)
                 .collect(Collectors.toList()));
         eventRepository.save(event);
@@ -57,7 +59,7 @@ public class EventCreateForAdminService {
     }
 
     private Event createEventEntity(EventCreateRequestDto requestDto,
-                                    List<InterestCategory> category, List<String> imageUrls) {
+                                    List<InterestCategory> category, Long userId, List<String> imageUrls) {
 
         return Event.builder()
                 .title(requestDto.getTitle())
@@ -67,6 +69,7 @@ public class EventCreateForAdminService {
                 .endAt(requestDto.getEndAt())
                 .categories(category)
                 .imageUrls(imageUrls)
+                .userId(userId)
                 .build();
     }
 
