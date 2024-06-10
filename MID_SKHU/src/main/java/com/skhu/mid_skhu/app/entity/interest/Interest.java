@@ -41,6 +41,4 @@ public class Interest {
     @JoinColumn(name = "STUDENT_ID")
     private Student student;
 
-//    @OneToMany(mappedBy = "interest", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Event> events = new ArrayList<>();
 }

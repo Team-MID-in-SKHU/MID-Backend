@@ -1,18 +1,20 @@
 package com.skhu.mid_skhu.app.dto.event.requestDto;
 
-import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-public class EventCreateRequestDto {
+@Getter
+@AllArgsConstructor
+public class EventUpdateRequestDto {
 
+    private Long eventId;
     private String title;
     private String description;
     private String eventLocation;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
-    private List<String> interestCategoryList;
+    private List<String> interestCategories;
 }

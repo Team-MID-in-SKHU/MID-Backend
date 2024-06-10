@@ -10,9 +10,11 @@ import java.util.List;
 @Builder
 public class EventSearchResponseDto {
 
+    private Long eventId;
     private String eventTitle;
     private String eventDescription;
     private String eventLocation;
+    private List<String> imageUrls;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
     private List<String> category;

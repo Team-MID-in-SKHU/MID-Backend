@@ -68,10 +68,4 @@ public class Student {
         this.name = name;
         this.phoneNumber = phoneNumber;
     }
-
-    // Cascade 통한 엔티티 생명주기 관리 -> student 엔티티가 삭제되면 student에 속한 interest엔티티도 같이 삭제된다.
-//    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private List<Interest> interests = new ArrayList<>();
-
-    // @JsonIgnore or @JsonManagedReference 찾아보고 JSON 직렬화 문제 관리해놓기
 }

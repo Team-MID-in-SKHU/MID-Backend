@@ -8,10 +8,12 @@ import com.skhu.mid_skhu.app.repository.EventRepository;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
+import com.skhu.mid_skhu.global.util.GetS3Resource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -22,9 +24,13 @@ import java.util.stream.Collectors;
 public class EventCreateForAdminService {
 
     private final EventRepository eventRepository;
+    private final S3ImageFileService s3ImageFileService;
 
     @Transactional
-    public ApiResponseTemplate<EventCreateResponseDto> createEvent(EventCreateRequestDto requestDto, Principal principal) {
+    public ApiResponseTemplate<EventCreateResponseDto> createEvent(
+            EventCreateRequestDto requestDto,
+            List<MultipartFile> images,
+            Principal principal) {
 
         List<InterestCategory> category = convertInterestCategory(requestDto.getInterestCategoryList());
 
@@ -33,7 +39,13 @@ public class EventCreateForAdminService {
                     ErrorCode.NOT_FOUND_CATEGORY_IN_INTEREST_EXCEPTION.getMessage() + "\n" + category);
         }
 
-        Event event = createEventEntity(requestDto, category);
+        List<GetS3Resource> imagesUrl = uploadImages(images, "event");
+
+        Long writerId = Long.parseLong(principal.getName());
+
+        Event event = createEventEntity(requestDto, category, writerId, imagesUrl.stream()
+                .map(GetS3Resource::getImageUrl)
+                .collect(Collectors.toList()));
         eventRepository.save(event);
 
         EventCreateResponseDto responseDto = createEventRegistrationResponseDto(event);
@@ -46,7 +58,8 @@ public class EventCreateForAdminService {
                 .build();
     }
 
-    private Event createEventEntity(EventCreateRequestDto requestDto, List<InterestCategory> category) {
+    private Event createEventEntity(EventCreateRequestDto requestDto,
+                                    List<InterestCategory> category, Long userId, List<String> imageUrls) {
 
         return Event.builder()
                 .title(requestDto.getTitle())
@@ -55,6 +68,8 @@ public class EventCreateForAdminService {
                 .startAt(requestDto.getStartAt())
                 .endAt(requestDto.getEndAt())
                 .categories(category)
+                .imageUrls(imageUrls)
+                .userId(userId)
                 .build();
     }
 
@@ -63,6 +78,10 @@ public class EventCreateForAdminService {
                 .map(String::toUpperCase)
                 .map(InterestCategory::convertToCategory)
                 .collect(Collectors.toList());
+    }
+
+    private List<GetS3Resource> uploadImages(List<MultipartFile> files, String directory) {
+        return s3ImageFileService.uploadImageFiles(files, directory);
     }
 
     private EventCreateResponseDto createEventRegistrationResponseDto(Event event) {
@@ -75,6 +94,7 @@ public class EventCreateForAdminService {
                 .interestCategoryList(event.getCategories().stream()
                         .map(InterestCategory::name)
                         .collect(Collectors.toList()))
+                .imageUrls(event.getImageUrls())
                 .build();
     }
 }
