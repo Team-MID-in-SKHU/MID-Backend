@@ -1,11 +1,13 @@
 package com.skhu.mid_skhu.app.service.event;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.skhu.mid_skhu.global.config.S3Config;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
+import com.skhu.mid_skhu.global.util.GetS3Resource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,9 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,7 +30,7 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
     private String bucket;
 
     @Override
-    public String uploadImageFile(MultipartFile imageFile, String directory) throws IOException {
+    public GetS3Resource uploadSingleImageFile(MultipartFile imageFile, String directory) throws IOException {
         String imageFileName = createImageFileName(imageFile.getOriginalFilename());
         String imageFileUrl = "https://" + bucket + "/" + directory + "/" + imageFileName;
 
@@ -38,28 +38,29 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
         metadata.setContentType(imageFile.getContentType());
         metadata.setContentLength(imageFile.getSize());
 
-        amazonS3Client.putObject(bucket, directory + "/" + imageFileName, imageFile.getInputStream(), metadata);
+        try (InputStream inputStream = imageFile.getInputStream()){
+            amazonS3Client.putObject(new PutObjectRequest(bucket, imageFileName, inputStream, metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FAILED_UPLOAD_IMAGE_FILE_EXCEPTION,
+                    ErrorCode.FAILED_UPLOAD_IMAGE_FILE_EXCEPTION.getMessage());
+        }
 
-        return imageFileUrl;
+        return new GetS3Resource(amazonS3Client.getUrl(bucket, imageFileName).toString(), imageFileName);
     }
 
     @Override
-    public List<String> uploadImageFiles(List<MultipartFile> imageFiles, String directory) {
-        List<String> imageFileUrls;
-
-        imageFileUrls = imageFiles.stream()
-                .filter(multipartFile -> !multipartFile.isEmpty())
-                .map(multipartFile -> {
+    public List<GetS3Resource> uploadImageFiles(List<MultipartFile> imageFiles, String directory) {
+        return imageFiles.stream()
+                .map(file -> {
                     try {
-                        return uploadImageFile(multipartFile, directory);
+                        return uploadSingleImageFile(file, directory);
                     } catch (IOException e) {
                         throw new CustomException(ErrorCode.FAILED_UPLOAD_IMAGE_FILE_EXCEPTION,
                                 ErrorCode.FAILED_UPLOAD_IMAGE_FILE_EXCEPTION.getMessage());
                     }
                 })
                 .collect(Collectors.toList());
-
-        return imageFileUrls;
     }
 
     private String createImageFileName(String imageFileName) {
