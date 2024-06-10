@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class EventUpdateRequestDto {
 
+    private Long eventId;
     private String title;
     private String description;
     private String eventLocation;
