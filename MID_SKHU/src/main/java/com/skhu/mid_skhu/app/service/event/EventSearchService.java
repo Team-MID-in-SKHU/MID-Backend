@@ -42,17 +42,14 @@ public class EventSearchService {
                     ErrorCode.NOT_FOUND_EVENT_DATA_EXCEPTION.getMessage());
         }
 
-
         List<EventSearchResponseDto> responseDtoList = events.stream()
                 .map(event -> EventSearchResponseDto.builder()
+                        .eventId(event.getId())
                         .eventTitle(event.getTitle())
                         .eventDescription(event.getDescription())
                         .eventLocation(event.getEventLocation())
                         .startAt(event.getStartAt())
                         .endAt(event.getEndAt())
-                        .category(event.getCategories().stream()
-                                .map(InterestCategory::getCode)
-                                .collect(Collectors.toList()))
                         .imageUrls(event.getImageUrls())
                         .build()
                 ).collect(Collectors.toList());
