@@ -10,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Printable;
 import java.security.Principal;
 
 @Service
@@ -25,12 +24,9 @@ public class EventModifyForAdminService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION,
                         "게시글: " + ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage()));
 
-        Long writerId = findUserId(principal);
+        Long userId = findUserId(principal);
 
-        if (!event.getUserId().equals(writerId)) {
-            throw new CustomException(ErrorCode.ONLY_OWN_EVENT_MODIFY_EXCEPTION,
-                    ErrorCode.ONLY_OWN_EVENT_MODIFY_EXCEPTION.getMessage());
-        }
+        validateEventWriterUser(event.getUserId(), userId);
 
         event.updateEventDetails(requestDto);
 
@@ -50,10 +46,7 @@ public class EventModifyForAdminService {
 
         Long userId = findUserId(principal);
 
-        if (!event.getUserId().equals(userId)) {
-            throw new CustomException(ErrorCode.ONLY_OWN_EVENT_MODIFY_EXCEPTION,
-                    ErrorCode.ONLY_OWN_EVENT_MODIFY_EXCEPTION.getMessage());
-        }
+        validateEventWriterUser(event.getUserId(), userId);
 
         eventRepository.deleteById(eventId);
 
@@ -69,5 +62,12 @@ public class EventModifyForAdminService {
         Long userId = Long.parseLong(principal.getName());
 
         return userId;
+    }
+
+    public void validateEventWriterUser(Long writerId, Long userId) {
+        if (!writerId.equals(userId)) {
+            throw new CustomException(ErrorCode.ONLY_OWN_EVENT_MODIFY_EXCEPTION,
+                    ErrorCode.ONLY_OWN_EVENT_MODIFY_EXCEPTION.getMessage());
+        }
     }
 }
