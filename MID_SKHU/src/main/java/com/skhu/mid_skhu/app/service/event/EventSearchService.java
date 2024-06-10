@@ -37,11 +37,6 @@ public class EventSearchService {
                 categories
         ));
 
-        if (events.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_EVENT_DATA_EXCEPTION,
-                    ErrorCode.NOT_FOUND_EVENT_DATA_EXCEPTION.getMessage());
-        }
-
         List<EventSearchResponseDto> responseDtoList = events.stream()
                 .map(event -> EventSearchResponseDto.builder()
                         .eventId(event.getId())
@@ -55,6 +50,15 @@ public class EventSearchService {
                                 .collect(Collectors.toList()))
                         .build()
                 ).collect(Collectors.toList());
+
+        if (events.isEmpty()) {
+            return ApiResponseTemplate.<List<EventSearchResponseDto>>builder()
+                    .status(200)
+                    .success(true)
+                    .message("해당 검색결과에 부합하는 이벤트가 존재하지 않습니다")
+                    .data(responseDtoList)
+                    .build();
+        }
 
         return ApiResponseTemplate.<List<EventSearchResponseDto>>builder()
                 .status(200)
