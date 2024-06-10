@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class GetS3Res {
+public class GetS3Resource {
 
     private String imageUrl;
     private String fileName;
