@@ -58,7 +58,4 @@ public class Event {
     @Column(name = "INTEREST_CATEGORY", nullable = false)
     private List<InterestCategory> categories;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "INTEREST_ID")
-//    private Interest interest;
 }
