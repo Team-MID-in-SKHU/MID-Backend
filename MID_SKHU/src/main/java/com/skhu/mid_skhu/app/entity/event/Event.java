@@ -58,4 +58,17 @@ public class Event {
     @Column(name = "INTEREST_CATEGORY", nullable = false)
     private List<InterestCategory> categories;
 
+    @Column(name = "USER_ID")
+    private Long userId;
+
+    public void updateEventDetails(String title, String description,
+                                   String eventLocation, LocalDateTime startAt,
+                                   LocalDateTime endAt, List<InterestCategory> categories) {
+        this.title = title;
+        this.description = description;
+        this.eventLocation = eventLocation;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.categories = categories;
+    }
 }
