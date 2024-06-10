@@ -27,7 +27,10 @@ public class EventCreateForAdminService {
     private final S3ImageFileService s3ImageFileService;
 
     @Transactional
-    public ApiResponseTemplate<EventCreateResponseDto> createEvent(EventCreateRequestDto requestDto, Principal principal) {
+    public ApiResponseTemplate<EventCreateResponseDto> createEvent(
+            EventCreateRequestDto requestDto,
+            List<MultipartFile> images,
+            Principal principal) {
 
         List<InterestCategory> category = convertInterestCategory(requestDto.getInterestCategoryList());
 
@@ -36,7 +39,7 @@ public class EventCreateForAdminService {
                     ErrorCode.NOT_FOUND_CATEGORY_IN_INTEREST_EXCEPTION.getMessage() + "\n" + category);
         }
 
-        List<GetS3Resource> imagesUrl = uploadImages(requestDto.getImages(), "event");
+        List<GetS3Resource> imagesUrl = uploadImages(images, "event");
 
         Event event = createEventEntity(requestDto, category, imagesUrl.stream()
                 .map(GetS3Resource::getImageUrl)

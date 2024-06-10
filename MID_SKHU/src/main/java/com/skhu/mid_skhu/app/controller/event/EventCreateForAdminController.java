@@ -14,9 +14,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,9 +40,12 @@ public class EventCreateForAdminController {
                     @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<EventCreateResponseDto>> createEvent(@RequestBody EventCreateRequestDto requestDto, Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<EventCreateResponseDto>> createEvent(
+            @RequestBody EventCreateRequestDto requestDto,
+            @RequestPart List<MultipartFile> images,
+            Principal principal) {
 
-        ApiResponseTemplate<EventCreateResponseDto> data = eventCreateForAdminService.createEvent(requestDto, principal);
+        ApiResponseTemplate<EventCreateResponseDto> data = eventCreateForAdminService.createEvent(requestDto, images, principal);
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }
