@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Printable;
 import java.security.Principal;
 
 @Service
@@ -24,7 +25,7 @@ public class EventModifyForAdminService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION,
                         "게시글: " + ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage()));
 
-        Long writerId = Long.parseLong(principal.getName());
+        Long writerId = findUserId(principal);
 
         if (!event.getUserId().equals(writerId)) {
             throw new CustomException(ErrorCode.ONLY_OWN_EVENT_MODIFY_EXCEPTION,
@@ -39,5 +40,34 @@ public class EventModifyForAdminService {
                 .message("수정에 성공했습니다")
                 .data("")
                 .build();
+    }
+
+    public ApiResponseTemplate<String> deleteEvent(Principal principal, Long eventId) {
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION,
+                        ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage()));
+
+        Long userId = findUserId(principal);
+
+        if (!event.getUserId().equals(userId)) {
+            throw new CustomException(ErrorCode.ONLY_OWN_EVENT_MODIFY_EXCEPTION,
+                    ErrorCode.ONLY_OWN_EVENT_MODIFY_EXCEPTION.getMessage());
+        }
+
+        eventRepository.deleteById(eventId);
+
+        return ApiResponseTemplate.<String>builder()
+                .status(204)
+                .success(true)
+                .message("삭제에 성공했습니다")
+                .data("")
+                .build();
+    }
+
+    private Long findUserId(Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+
+        return userId;
     }
 }
