@@ -15,5 +15,4 @@ public class EventCreateRequestDto {
     private LocalDateTime startAt;
     private LocalDateTime endAt;
     private List<String> interestCategoryList;
-    private List<MultipartFile> images;
 }
