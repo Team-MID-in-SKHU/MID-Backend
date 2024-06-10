@@ -34,8 +34,7 @@ public enum ErrorCode {
     UNAUTHORIZED_EMAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "이메일 인증이 되지 않은 유저"),
     UNAUTHORIZED_EXCEPTION(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자거나 인증과정에 오류가 있습니다. "),
     INVALID_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
-    ONLY_OWN_WORKPLACE_REPORT_MODIFY_EXCEPTION(HttpStatus.UNAUTHORIZED, "관리자는 자신의 작업현장에서 발생한 신고만 수정할 수 있습니다."),
-    ONLY_OWN_WORKPLACE_USER_INQUIRY_EXCEPTION(HttpStatus.UNAUTHORIZED, "관리자는 자신의 작업현장의 근로자만 조회할 수 있습니다. "),
+    ONLY_OWN_EVENT_MODIFY_EXCEPTION(HttpStatus.UNAUTHORIZED, "본인이 작성한 Event만 수정이 가능합니다."),
 
     // 403 Forbidden
     FORBIDDEN_AUTH_EXCEPTION(HttpStatus.FORBIDDEN, "권한 정보가 없는 토큰입니다."),
@@ -49,7 +48,6 @@ public enum ErrorCode {
     NOT_FOUND_INTEREST_CATEGORY_IN_EVENT(HttpStatus.NOT_FOUND, "등록된 일정이 없습니다."),
     NOT_FOUND_EVENT_DATA_EXCEPTION(HttpStatus.NOT_FOUND, "해당 검색 필터에 부합하는 이벤트 목록이 없습니다."),
     NOT_FOUND_TODAY_EVENT_EXCEPTION(HttpStatus.NOT_FOUND, "조회에 성공했으나 오늘 하루 일정이 없습니다."),
-    NOT_FOUND_ATTENDANCE_EXCEPTION(HttpStatus.NOT_FOUND, "해당 사용자에 대한 출근 기록이 없습니다. "),
     NOT_FOUND_USER_EXCEPTION(HttpStatus.NOT_FOUND, "해당 검색결과에 해당하는 사용자를 찾을 수 없습니다."),
     NOT_FOUND_STUDENT_NUM_EXCEPTION(HttpStatus.NOT_FOUND, "해당 학번에 해당하는 학생을 찾을 수 없습니다"),
 
