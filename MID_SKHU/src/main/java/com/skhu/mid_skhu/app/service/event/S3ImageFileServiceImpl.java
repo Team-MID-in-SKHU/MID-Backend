@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -60,13 +61,15 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
     }
 
     private String createImageFileName(String imageFileName) {
-        String encodedImageFileName;
+        return UUID.randomUUID().toString().concat(getFileExtension(imageFileName));
+    }
+
+    private String getFileExtension(String fileName) {
         try {
-            encodedImageFileName = URLEncoder.encode(imageFileName, StandardCharsets.UTF_8.toString());
-            return encodedImageFileName.replaceAll("/", "");
-        } catch (UnsupportedEncodingException e) {
-            throw new CustomException(ErrorCode.FAIL_ENCODING_IMAGE_FILE_NAME,
-                    ErrorCode.FAIL_ENCODING_IMAGE_FILE_NAME.getMessage());
+            return fileName.substring(fileName.lastIndexOf("."));
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new CustomException(ErrorCode.INVALID_FILE_TYPE_EXCEPTION,
+                    ErrorCode.INVALID_FILE_TYPE_EXCEPTION.getMessage() + "파일명: "+ fileName);
         }
     }
 }

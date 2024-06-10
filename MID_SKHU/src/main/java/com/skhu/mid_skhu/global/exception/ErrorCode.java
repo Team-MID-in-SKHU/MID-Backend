@@ -28,6 +28,7 @@ public enum ErrorCode {
     SMS_CERTIFICATION_SEND_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "인증번호 발송에 실패했습니다."),
     SMS_CERTIFICATION_VERIFY_FAIL_EXCEPTION(HttpStatus.BAD_REQUEST, "문자 인증에 실패했습니다."),
     FAIL_ENCODING_IMAGE_FILE_NAME(HttpStatus.BAD_REQUEST, "파일명 인코딩에 실패했습니다."),
+    INVALID_FILE_TYPE_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일입니다."),
 
     // 401 Unauthorized
     UNAUTHORIZED_EMAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "이메일 인증이 되지 않은 유저"),
