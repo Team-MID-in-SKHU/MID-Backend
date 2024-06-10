@@ -39,8 +39,7 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
         metadata.setContentLength(imageFile.getSize());
 
         try (InputStream inputStream = imageFile.getInputStream()){
-            amazonS3Client.putObject(new PutObjectRequest(bucket, imageFileName, inputStream, metadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            amazonS3Client.putObject(new PutObjectRequest(bucket, imageFileName, inputStream, metadata));
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FAILED_UPLOAD_IMAGE_FILE_EXCEPTION,
                     ErrorCode.FAILED_UPLOAD_IMAGE_FILE_EXCEPTION.getMessage());

@@ -41,7 +41,7 @@ public class EventCreateForAdminController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<EventCreateResponseDto>> createEvent(
-            @RequestBody EventCreateRequestDto requestDto,
+            @RequestPart EventCreateRequestDto requestDto,
             @RequestPart List<MultipartFile> images,
             Principal principal) {
 
