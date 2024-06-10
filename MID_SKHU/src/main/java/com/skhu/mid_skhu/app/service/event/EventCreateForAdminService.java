@@ -8,6 +8,7 @@ import com.skhu.mid_skhu.app.repository.EventRepository;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
+import com.skhu.mid_skhu.global.util.GetS3Resource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,11 @@ public class EventCreateForAdminService {
                     ErrorCode.NOT_FOUND_CATEGORY_IN_INTEREST_EXCEPTION.getMessage() + "\n" + category);
         }
 
-        List<String> imagesUrl = uploadImages(requestDto.getImages(), "event");
+        List<GetS3Resource> imagesUrl = uploadImages(requestDto.getImages(), "event");
 
-        Event event = createEventEntity(requestDto, category, imagesUrl);
+        Event event = createEventEntity(requestDto, category, imagesUrl.stream()
+                .map(GetS3Resource::getImageUrl)
+                .collect(Collectors.toList()));
         eventRepository.save(event);
 
         EventCreateResponseDto responseDto = createEventRegistrationResponseDto(event);
@@ -71,7 +74,7 @@ public class EventCreateForAdminService {
                 .collect(Collectors.toList());
     }
 
-    private List<String> uploadImages(List<MultipartFile> files, String directory) {
+    private List<GetS3Resource> uploadImages(List<MultipartFile> files, String directory) {
         return s3ImageFileService.uploadImageFiles(files, directory);
     }
 
