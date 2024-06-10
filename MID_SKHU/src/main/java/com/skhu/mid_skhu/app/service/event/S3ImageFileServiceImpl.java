@@ -74,6 +74,7 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
         }
     }
 
+    @Override
     public void deleteFile(String fileName) {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }

@@ -9,15 +9,19 @@ import com.skhu.mid_skhu.global.exception.model.CustomException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class EventModifyForAdminService {
 
     private final EventRepository eventRepository;
+    private final S3ImageFileService s3ImageFileService;
 
+    @Transactional
     public ApiResponseTemplate<String> updateEventDetail(Principal principal, EventUpdateRequestDto requestDto) {
 
         Event event = eventRepository.findById(requestDto.getEventId())
@@ -38,6 +42,7 @@ public class EventModifyForAdminService {
                 .build();
     }
 
+    @Transactional
     public ApiResponseTemplate<String> deleteEvent(Principal principal, Long eventId) {
 
         Event event = eventRepository.findById(eventId)
@@ -47,6 +52,13 @@ public class EventModifyForAdminService {
         Long userId = findUserId(principal);
 
         validateEventWriterUser(event.getUserId(), userId);
+
+        List<String> imageUrls = event.getImageUrls();
+
+        for (String imageUrl : imageUrls) {
+            String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+            s3ImageFileService.deleteFile(fileName);
+        }
 
         eventRepository.deleteById(eventId);
 
