@@ -13,10 +13,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,13 +63,32 @@ public class EventForAdminController {
             description = "행사/이벤트를 수정합니다.",
             responses = {
                     @ApiResponse(responseCode = "201", description = "행사/이벤트 생성 성공"),
-                    @ApiResponse(responseCode = "403", description = "url문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "401", description = "권한 문제"),
+                    @ApiResponse(responseCode = "404", description = "찾을 수 없는 게시글"),
                     @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
             }
     )
     public ResponseEntity<ApiResponseTemplate<String>> updateEvent(@RequestBody EventUpdateRequestDto requestDto, Principal principal) {
 
         ApiResponseTemplate<String> data = eventModifyForAdminService.updateEventDetail(principal, requestDto);
+
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @DeleteMapping("/delete/{eventId}")
+    @Operation(
+            summary = "행사/이벤트 수정",
+            description = "행사/이벤트를 수정합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "행사/이벤트 생성 성공"),
+                    @ApiResponse(responseCode = "401", description = "권한 문제"),
+                    @ApiResponse(responseCode = "404", description = "찾을 수 없는 게시글"),
+                    @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<String>> deleteEvent(@PathVariable Long eventId, Principal principal) {
+
+        ApiResponseTemplate<String> data = eventModifyForAdminService.deleteEvent(principal, eventId);
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }
