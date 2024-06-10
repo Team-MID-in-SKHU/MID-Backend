@@ -4,7 +4,7 @@ import com.skhu.mid_skhu.app.dto.event.requestDto.EventCreateRequestDto;
 import com.skhu.mid_skhu.app.dto.event.requestDto.EventUpdateRequestDto;
 import com.skhu.mid_skhu.app.dto.event.responseDto.EventCreateResponseDto;
 import com.skhu.mid_skhu.app.service.event.EventCreateForAdminService;
-import com.skhu.mid_skhu.app.service.event.EventModifyService;
+import com.skhu.mid_skhu.app.service.event.EventModifyForAdminService;
 import com.skhu.mid_skhu.global.common.dto.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,7 +32,7 @@ import java.util.List;
 public class EventForAdminController {
 
     private final EventCreateForAdminService eventCreateForAdminService;
-    private final EventModifyService eventModifyService;
+    private final EventModifyForAdminService eventModifyForAdminService;
 
     @PostMapping("/create")
     @Operation(
@@ -66,7 +66,7 @@ public class EventForAdminController {
     )
     public ResponseEntity<ApiResponseTemplate<String>> updateEvent(@RequestBody EventUpdateRequestDto requestDto, Principal principal) {
 
-        ApiResponseTemplate<String> data = eventModifyService.updateEventDetail(principal, requestDto);
+        ApiResponseTemplate<String> data = eventModifyForAdminService.updateEventDetail(principal, requestDto);
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }

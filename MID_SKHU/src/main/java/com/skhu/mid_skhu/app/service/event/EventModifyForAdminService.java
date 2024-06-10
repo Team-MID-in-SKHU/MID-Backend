@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class EventModifyService {
+public class EventModifyForAdminService {
 
     private final EventRepository eventRepository;
 
