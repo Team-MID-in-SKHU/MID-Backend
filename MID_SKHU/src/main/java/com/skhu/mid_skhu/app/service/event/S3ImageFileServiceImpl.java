@@ -1,6 +1,6 @@
 package com.skhu.mid_skhu.app.service.event;
 
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class S3ImageFileServiceImpl implements S3ImageFileService{
 
-    private final AmazonS3Client amazonS3Client;
+    private final AmazonS3 amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     @Override
     public String uploadImageFile(MultipartFile imageFile, String directory) throws IOException {
-        String imageFileName = sanitizeImageFileName(imageFile.getOriginalFilename());
+        String imageFileName = createImageFileName(imageFile.getOriginalFilename());
         String imageFileUrl = "https://" + bucket + "/" + directory + "/" + imageFileName;
 
         ObjectMetadata metadata = new ObjectMetadata();
@@ -59,7 +59,7 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
         return imageFileUrls;
     }
 
-    private String sanitizeImageFileName(String imageFileName) {
+    private String createImageFileName(String imageFileName) {
         String encodedImageFileName;
         try {
             encodedImageFileName = URLEncoder.encode(imageFileName, StandardCharsets.UTF_8.toString());
