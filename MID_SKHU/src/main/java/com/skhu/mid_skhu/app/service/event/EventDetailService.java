@@ -32,6 +32,7 @@ public class EventDetailService {
         List<String> images = event.getImageUrls();
 
         EventSearchResponseDto responseDto = EventSearchResponseDto.builder()
+                .eventId(event.getId())
                 .eventTitle(event.getTitle())
                 .eventDescription(event.getDescription())
                 .eventLocation(event.getEventLocation())

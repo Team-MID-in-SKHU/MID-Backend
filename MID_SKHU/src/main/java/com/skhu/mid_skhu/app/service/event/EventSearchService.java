@@ -50,7 +50,9 @@ public class EventSearchService {
                         .eventLocation(event.getEventLocation())
                         .startAt(event.getStartAt())
                         .endAt(event.getEndAt())
-                        .imageUrls(event.getImageUrls())
+                        .category(event.getCategories().stream()
+                                .map(InterestCategory::getDisplayName)
+                                .collect(Collectors.toList()))
                         .build()
                 ).collect(Collectors.toList());
 
