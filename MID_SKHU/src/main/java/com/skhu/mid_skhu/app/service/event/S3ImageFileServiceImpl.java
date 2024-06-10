@@ -32,7 +32,6 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
     @Override
     public GetS3Resource uploadSingleImageFile(MultipartFile imageFile, String directory) throws IOException {
         String imageFileName = createImageFileName(imageFile.getOriginalFilename());
-        String imageFileUrl = "https://" + bucket + "/" + directory + "/" + imageFileName;
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(imageFile.getContentType());
@@ -45,7 +44,7 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
                     ErrorCode.FAILED_UPLOAD_IMAGE_FILE_EXCEPTION.getMessage());
         }
 
-        return new GetS3Resource(amazonS3Client.getUrl(bucket, imageFileName).toString(), imageFileName);
+        return new GetS3Resource(amazonS3Client.getUrl(bucket, directory + "/" + imageFileName).toString(), imageFileName);
     }
 
     @Override
