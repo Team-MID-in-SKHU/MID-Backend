@@ -26,4 +26,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
     List<Event> findTodayEventsByCategories(List<InterestCategory> categories, LocalDateTime startAt, LocalDateTime endAt);
 
     List<Event> findAllByStartAtBetween(LocalDateTime startAt, LocalDateTime endAt);
+
+    @Query("SELECT e FROM Event e WHERE e.startAt < :currentTime AND e.endAt > :currentTime ORDER BY e.startAt ASC")
+    List<Event> findOngoingEvents(LocalDateTime currentTime);
+
+    @Query("SELECT e FROM Event e WHERE e.endAt > :currentTime ORDER BY e.endAt ASC")
+    List<Event> findEventsWithNearestEndAt(LocalDateTime currentTime);
 }

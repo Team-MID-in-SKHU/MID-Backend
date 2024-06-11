@@ -26,7 +26,7 @@ public class EventSearchService {
 
     @Transactional(readOnly = true)
     public ApiResponseTemplate<List<EventSearchResponseDto>> searchEvents(Principal principal,
-                                                                    EventSearchRequestDto eventSearchRequestDto) {
+                                                                          EventSearchRequestDto eventSearchRequestDto) {
 
         List<InterestCategory> categories = InterestCategory.convertToCategoryList(eventSearchRequestDto.getCategoryList());
 
