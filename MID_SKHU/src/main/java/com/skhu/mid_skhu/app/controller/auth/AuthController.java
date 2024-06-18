@@ -58,7 +58,7 @@ public class AuthController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @GetMapping("/duplicate-check")
+    @PostMapping("/duplicate-check")
     @Operation(
             summary = "학번 중복검사",
             description = "사용자의 학번을 중복인지 검사합니다",
