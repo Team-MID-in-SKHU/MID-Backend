@@ -28,7 +28,6 @@ public class S3ImageFileServiceImpl implements S3ImageFileService {
     @Value("${app.s3.bucket}")
     private String bucket;
 
-    /** 컨트롤러가 사용하는 신규 메서드(권장) */
     public S3UploadResponse uploadImage(MultipartFile imageFile, String directory) {
         final String normalizedDir = normalize(directory);
         final String fileName = createImageFileName(imageFile.getOriginalFilename());
@@ -70,7 +69,6 @@ public class S3ImageFileServiceImpl implements S3ImageFileService {
                 .collect(Collectors.toList());
     }
 
-    /** key 전체를 받아 삭제 (이전 deleteFile(fileName)도 key로 동작했다면 명확화 차원에서 동일 시그니처 유지) */
     @Override
     public void deleteFile(String key) {
         amazonS3Client.deleteObject(bucket, key);
