@@ -1,0 +1,19 @@
+spring:
+  config:
+    activate:
+      on-profile: localstack
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: test
+      secret-key: test
+    s3:
+      endpoint: http://localhost:4566
+      path-style-access-enabled: true
+
+app:
+  s3:
+    bucket: mid-pref-test
