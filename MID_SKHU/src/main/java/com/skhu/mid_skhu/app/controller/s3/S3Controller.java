@@ -1,18 +1,15 @@
 package com.skhu.mid_skhu.app.controller.s3;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.skhu.mid_skhu.app.dto.event.responseDto.S3UploadResponse;
+import com.skhu.mid_skhu.app.service.event.S3ImageFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,46 +17,43 @@ import java.io.IOException;
 @RequestMapping("/api/v1/s3")
 public class S3Controller {
 
-    private final AmazonS3Client amazonS3Client;
-
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    private final S3ImageFileService s3ImageFileService;
 
     @PostMapping("/upload")
     @Operation(
             summary = "이미지 업로드",
-            description = "s3 버킷에 이미지를 업로드합니다",
+            description = "S3 버킷에 이미지를 업로드합니다",
             responses = {
                     @ApiResponse(responseCode = "200", description = "이미지 업로드 성공"),
                     @ApiResponse(responseCode = "400", description = "이미지 업로드 실패"),
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
-        String fileUrl = "https://" + bucket + "/" + fileName;
-
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(file.getContentType());
-        metadata.setContentLength(file.getSize());
-
-        amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
-
-        return ResponseEntity.ok(fileUrl);
+    public ResponseEntity<S3UploadResponse> uploadFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "directory", required = false, defaultValue = "events/test") String directory
+    ) {
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(s3ImageFileService.uploadImage(file, directory));
     }
 
     @DeleteMapping("/delete")
     @Operation(
             summary = "이미지 삭제",
-            description = "s3 버킷에서 이미지를 삭제합니다",
+            description = "S3 버킷에서 이미지를 삭제합니다",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "이미지 삭제 성공"),
+                    @ApiResponse(responseCode = "204", description = "이미지 삭제 성공"),
                     @ApiResponse(responseCode = "400", description = "이미지 삭제 실패"),
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<String> deleteFile(@RequestParam("fileName") String fileName) {
-        amazonS3Client.deleteObject(bucket, fileName);
-        return ResponseEntity.ok("삭제 성공");
+    public ResponseEntity<Void> deleteFile(@RequestParam("key") String key) {
+        if (key == null || key.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        s3ImageFileService.deleteFile(key);
+        return ResponseEntity.noContent().build();
     }
 }
