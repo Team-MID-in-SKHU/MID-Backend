@@ -11,6 +11,7 @@ import com.skhu.mid_skhu.global.util.GetS3Resource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +27,7 @@ public class S3ImageFileServiceImpl implements S3ImageFileService{
 
     private final AmazonS3 amazonS3Client;
 
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${app.s3.bucket}")
     private String bucket;
 
     @Override
