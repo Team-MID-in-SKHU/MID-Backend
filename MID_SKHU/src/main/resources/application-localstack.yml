@@ -31,4 +31,4 @@ cloud:
 
 app:
   s3:
-    bucket: mid-pref-test
+    bucket: mid-perf-test
