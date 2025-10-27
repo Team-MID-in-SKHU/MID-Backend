@@ -17,6 +17,12 @@ spring:
       hibernate:
         format_sql: false
         use_sql_comments: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 200MB
+      file-size-threshold: 2MB
 
 cloud:
   aws:
