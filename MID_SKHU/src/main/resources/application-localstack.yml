@@ -38,3 +38,25 @@ cloud:
 app:
   s3:
     bucket: mid-perf-test
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: mid-skhu
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.9,0.95,0.99
+    enable:
+      jvm: true
+      system: true
+      process: true
+      http: true
