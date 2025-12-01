@@ -1,5 +1,6 @@
 package com.skhu.mid_skhu.app.controller.s3;
 
+import com.skhu.mid_skhu.app.dto.event.responseDto.PreSignedUploadResponse;
 import com.skhu.mid_skhu.app.dto.event.responseDto.S3UploadResponse;
 import com.skhu.mid_skhu.app.service.event.S3ImageFileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +37,18 @@ public class S3Controller {
         if (file == null || file.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(s3ImageFileService.uploadImage(file, directory));
+        return ResponseEntity.ok(s3ImageFileService.uploadMultipartImage(file, directory));
+    }
+
+    @PostMapping("/presign")
+    public ResponseEntity<PreSignedUploadResponse> presignUpload(
+            @RequestParam(value = "directory", defaultValue = "events/test") String directory,
+            @RequestParam("filename") String fileName,
+            @RequestParam("contentType") String contentType
+    ) {
+        return ResponseEntity.ok(
+                s3ImageFileService.createPreSignedUploadUrl(directory, fileName, contentType)
+        );
     }
 
     @DeleteMapping("/delete")

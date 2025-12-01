@@ -1,15 +1,20 @@
 package com.skhu.mid_skhu.app.service.event;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.skhu.mid_skhu.app.dto.event.responseDto.PreSignedUploadResponse;
 import com.skhu.mid_skhu.app.dto.event.responseDto.S3UploadResponse;
 import com.skhu.mid_skhu.global.exception.ErrorCode;
 import com.skhu.mid_skhu.global.exception.model.CustomException;
 import com.skhu.mid_skhu.global.util.GetS3Resource;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +33,48 @@ public class S3ImageFileServiceImpl implements S3ImageFileService {
     @Value("${app.s3.bucket}")
     private String bucket;
 
-    public S3UploadResponse uploadImage(MultipartFile imageFile, String directory) {
+    @Override
+    public PreSignedUploadResponse createPreSignedUploadUrl(String directory, 
+                                                            String originalFileName,
+                                                            String contentType) {
+
+        final String normalizedDirectory = normalize(directory);
+        final String fileName = createImageFileName(originalFileName);
+        final String key = getKey(normalizedDirectory, fileName);
+
+        Instant expireAt = Instant.now().plus(Duration.ofMinutes(15));
+
+        GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                new GeneratePresignedUrlRequest(bucket, key)
+                        .withMethod(HttpMethod.PUT)
+                        .withExpiration(Date.from(expireAt));
+
+        if (contentType != null && !contentType.isBlank()) {
+            generatePresignedUrlRequest.addRequestParameter("Content-Type", contentType);
+        }
+
+        URL url = amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
+
+        return new PreSignedUploadResponse(
+                bucket,
+                key,
+                url.toString(),
+                expireAt,
+                HttpMethod.PUT.name(),
+                contentType
+        );
+    }
+
+    private String getKey(String normalizedDirectory, String fileName) {
+        if (normalizedDirectory.isEmpty()) {
+            return fileName;
+        }
+
+        return normalizedDirectory + "/" + fileName;
+    }
+
+    @Override
+    public S3UploadResponse uploadMultipartImage(MultipartFile imageFile, String directory) {
         final String normalizedDir = normalize(directory);
         final String fileName = createImageFileName(imageFile.getOriginalFilename());
         final String key = normalizedDir.isEmpty() ? fileName : normalizedDir + "/" + fileName;
@@ -55,9 +101,8 @@ public class S3ImageFileServiceImpl implements S3ImageFileService {
         }
     }
 
-    // 기존 메서드(호환 유지). 내부적으로 신규 로직을 재사용
     public GetS3Resource uploadSingleImageFile(MultipartFile imageFile, String directory) {
-        S3UploadResponse res = uploadImage(imageFile, directory);
+        S3UploadResponse res = uploadMultipartImage(imageFile, directory);
         // 과거 타입과의 호환을 위해 최소 정보만 매핑
         return new GetS3Resource(res.url(), fileNameFromKey(res.key()));
     }
@@ -75,10 +120,12 @@ public class S3ImageFileServiceImpl implements S3ImageFileService {
     }
 
     private String normalize(String dir) {
-        if (dir == null) return "";
-        String n = dir.replace("\\", "/");
-        n = n.replaceAll("^/+", "").replaceAll("/+$", "");
-        return n;
+        if (dir == null) {
+            return "";
+        }
+        String directory = dir.replace("\\", "/");
+        directory = directory.replaceAll("^/+", "").replaceAll("/+$", "");
+        return directory;
     }
 
     private String createImageFileName(String original) {
