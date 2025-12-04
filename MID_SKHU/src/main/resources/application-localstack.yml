@@ -1,0 +1,62 @@
+spring:
+  config:
+    activate:
+      on-profile: localstack
+  datasource:
+    url: ${DB_JDBC_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 210MB
+      max-request-size: 210MB
+      file-size-threshold: 2MB
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: test
+      secret-key: test
+    s3:
+      endpoint: http://localhost:4566
+      path-style-access-enabled: true
+
+app:
+  s3:
+    bucket: mid-perf-test
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: mid-skhu
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.9,0.95,0.99
+    enable:
+      jvm: true
+      system: true
+      process: true
+      http: true
